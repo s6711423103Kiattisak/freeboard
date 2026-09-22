@@ -1463,29 +1463,35 @@ function setDeviceStatus(online){
 
 function checkDeviceStatus(){
 
-    // ตอนเปิดหน้าเว็บครั้งแรก Firebase ยังโหลดข้อมูลไม่เสร็จ
-    // จึงยังไม่ควรตัดสินว่า ESP32 Offline
+    // ยังไม่ได้รับข้อมูลครั้งแรก: แสดงสถานะกำลังตรวจสอบ
     if(!newestTimestamp){
-
         document.getElementById("espDot").className = "dot";
-        document.getElementById("espText").textContent =
-            "ESP32 กำลังตรวจสอบ...";
-
+        document.getElementById("espText").textContent = "ESP32 กำลังตรวจสอบ...";
         document.getElementById("deviceMiniDot").className = "dot";
-        document.getElementById("deviceMini").textContent =
-            "กำลังตรวจสอบ...";
-
+        document.getElementById("deviceMini").textContent = "กำลังตรวจสอบ...";
         document.getElementById("streamDot").className = "dot";
-        document.getElementById("streamText").textContent =
-            "กำลังโหลดข้อมูล...";
-
+        document.getElementById("streamText").textContent = "กำลังตรวจสอบข้อมูล...";
         return;
     }
 
     const now = Math.floor(Date.now() / 1000);
     const age = now - newestTimestamp;
 
-    setDeviceStatus(age <= OFFLINE_SECONDS);
+    if(age <= OFFLINE_SECONDS){
+        document.getElementById("espDot").className = "dot green";
+        document.getElementById("espText").textContent = "ESP32 เชื่อมต่อสำเร็จ • LIVE";
+        document.getElementById("deviceMiniDot").className = "dot green";
+        document.getElementById("deviceMini").textContent = "เชื่อมต่อสำเร็จ";
+        document.getElementById("streamDot").className = "dot green";
+        document.getElementById("streamText").textContent = "ข้อมูลเรียลไทม์ • LIVE";
+    }else{
+        document.getElementById("espDot").className = "dot red";
+        document.getElementById("espText").textContent = "ESP32 ออฟไลน์";
+        document.getElementById("deviceMiniDot").className = "dot red";
+        document.getElementById("deviceMini").textContent = "ออฟไลน์";
+        document.getElementById("streamDot").className = "dot red";
+        document.getElementById("streamText").textContent = "ข้อมูลหยุดอัปเดต";
+    }
 }
 
 /* ==================================================
