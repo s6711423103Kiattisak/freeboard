@@ -3,950 +3,1774 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Smart Classroom 103</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 *{
-  box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 :root{
-  --bg:#f3f7fc;
-  --card:#ffffff;
-  --text:#162033;
-  --muted:#64748b;
-  --line:#e5eaf1;
-  --blue:#2563eb;
-  --cyan:#06b6d4;
-  --green:#16a34a;
-  --yellow:#d97706;
-  --red:#dc2626;
+    --bg:#f3f7fc;
+    --card:#ffffff;
+    --text:#162033;
+    --muted:#64748b;
+    --line:#e5eaf1;
+    --blue:#2563eb;
+    --cyan:#06b6d4;
+    --green:#16a34a;
+    --yellow:#d97706;
+    --red:#dc2626;
 }
 
 body{
-  margin:0;
-  font-family:Arial,"Noto Sans Thai",sans-serif;
-  background:var(--bg);
-  color:var(--text);
+    margin:0;
+    font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
+    background:var(--bg);
+    color:var(--text);
 }
 
 header{
-  background:
-    radial-gradient(circle at top right,rgba(255,255,255,.20),transparent 30%),
-    linear-gradient(120deg,#1d4ed8,#0284c7,#06b6d4);
-  color:white;
-  padding:30px 5%;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,255,255,.20),
+            transparent 30%
+        ),
+        linear-gradient(
+            120deg,
+            #1d4ed8,
+            #0284c7,
+            #06b6d4
+        );
+
+    color:white;
+    padding:30px 5%;
 }
 
 .header-inner{
-  max-width:1250px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:25px;
-  flex-wrap:wrap;
+    max-width:1250px;
+    margin:auto;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:25px;
+    flex-wrap:wrap;
 }
 
 .brand h1{
-  margin:0;
-  font-size:31px;
+    margin:0;
+    font-size:31px;
 }
 
 .brand p{
-  margin:7px 0 0;
-  opacity:.88;
+    margin:7px 0 0;
+    opacity:.9;
 }
 
 .live-badges{
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
 }
 
 .live-badge{
-  background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(5px);
-  border-radius:30px;
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
+    background:rgba(255,255,255,.15);
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    backdrop-filter:blur(5px);
+
+    border-radius:30px;
+
+    padding:10px 14px;
+
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    font-size:13px;
 }
 
 .dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#f59e0b;
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#f59e0b;
 }
 
 .dot.green{
-  background:#22c55e;
-  box-shadow:0 0 9px #22c55e;
+    background:#22c55e;
+    box-shadow:0 0 9px #22c55e;
 }
 
 .dot.red{
-  background:#ef4444;
+    background:#ef4444;
 }
 
 main{
-  max-width:1250px;
-  margin:auto;
-  padding:25px 20px 50px;
+    max-width:1250px;
+    margin:auto;
+
+    padding:
+        25px
+        20px
+        50px;
 }
 
+/* =========================
+   TOP SYSTEM STATUS
+========================= */
+
 .top-grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:18px;
-  margin-bottom:20px;
+    display:grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap:18px;
+
+    margin-bottom:20px;
 }
 
 .system-card,
 .score-card,
 .sensor-card,
 .panel{
-  background:white;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:0 7px 25px rgba(15,23,42,.055);
+    background:white;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 7px 25px
+        rgba(15,23,42,.055);
 }
 
 .system-card{
-  padding:20px;
+    padding:20px;
 }
 
 .system-card h2,
 .score-card h2{
-  margin:0 0 15px;
-  font-size:17px;
+    margin:
+        0 0 15px;
+
+    font-size:17px;
 }
 
 .health-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
 }
 
 .health-item{
-  background:#f8fafc;
-  border-radius:12px;
-  padding:13px;
+    background:#f8fafc;
+
+    border-radius:12px;
+
+    padding:13px;
 }
 
 .health-label{
-  color:var(--muted);
-  font-size:12px;
+    color:var(--muted);
+
+    font-size:12px;
 }
 
 .health-value{
-  margin-top:6px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  gap:7px;
+    margin-top:6px;
+
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
 }
 
+/* =========================
+   SCORE
+========================= */
+
 .score-card{
-  padding:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+    padding:20px;
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
 }
 
 .score-number{
-  font-size:47px;
-  font-weight:800;
-  line-height:1;
+    font-size:47px;
+
+    font-weight:800;
+
+    line-height:1;
 }
 
 .score-number small{
-  font-size:17px;
-  color:var(--muted);
+    font-size:17px;
+
+    color:var(--muted);
 }
 
 .score-label{
-  margin-top:7px;
-  font-weight:700;
-  color:var(--green);
+    margin-top:7px;
+
+    font-weight:700;
+
+    color:var(--green);
 }
 
 .score-ring{
-  width:82px;
-  height:82px;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:31px;
-  background:#ecfdf5;
+    width:82px;
+    height:82px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    font-size:31px;
+
+    background:#ecfdf5;
 }
 
+/* =========================
+   SECTION TITLE
+========================= */
+
 .section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:23px 0 15px;
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin:
+        23px 0 15px;
 }
 
 .section-title h2{
-  margin:0;
-  font-size:21px;
+    margin:0;
+
+    font-size:21px;
 }
 
 .last-update{
-  color:var(--muted);
-  font-size:13px;
+    color:var(--muted);
+
+    font-size:13px;
 }
 
+/* =========================
+   SENSOR CARDS
+========================= */
+
 .sensor-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:17px;
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:17px;
 }
 
 .sensor-card{
-  padding:20px;
-  position:relative;
-  overflow:hidden;
-  transition:.2s;
+    padding:20px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.2s;
 }
 
 .sensor-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 11px 28px rgba(15,23,42,.09);
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 11px 28px
+        rgba(15,23,42,.09);
 }
 
 .sensor-card::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:4px;
-  height:100%;
-  background:#38bdf8;
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:4px;
+    height:100%;
+
+    background:#38bdf8;
 }
 
 .sensor-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
 }
 
 .sensor-icon{
-  font-size:30px;
+    font-size:30px;
 }
 
 .sensor-name{
-  color:var(--muted);
-  font-size:13px;
+    color:var(--muted);
+
+    font-size:13px;
 }
 
 .sensor-value{
-  font-size:35px;
-  font-weight:800;
-  margin-top:11px;
+    font-size:35px;
+
+    font-weight:800;
+
+    margin-top:11px;
 }
 
 .sensor-unit{
-  font-size:15px;
-  font-weight:400;
-  color:var(--muted);
+    font-size:15px;
+
+    font-weight:400;
+
+    color:var(--muted);
 }
 
 .state{
-  display:inline-block;
-  margin-top:11px;
-  padding:6px 11px;
-  border-radius:20px;
-  font-size:12px;
-  background:#e2e8f0;
+    display:inline-block;
+
+    margin-top:11px;
+
+    padding:
+        6px 11px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    background:#e2e8f0;
 }
 
 .good{
-  background:#dcfce7;
-  color:#15803d;
+    background:#dcfce7;
+
+    color:#15803d;
 }
 
 .warn{
-  background:#fef3c7;
-  color:#a16207;
+    background:#fef3c7;
+
+    color:#a16207;
 }
 
 .bad{
-  background:#fee2e2;
-  color:#b91c1c;
+    background:#fee2e2;
+
+    color:#b91c1c;
 }
 
+/* =========================
+   PANEL
+========================= */
+
 .panel{
-  margin-top:20px;
-  padding:21px;
+    margin-top:20px;
+
+    padding:21px;
 }
 
 .panel h2{
-  margin:0 0 16px;
-  font-size:19px;
+    margin:
+        0 0 16px;
+
+    font-size:19px;
 }
 
+/* =========================
+   SMART ANALYSIS
+========================= */
+
 .analysis{
-  padding:18px;
-  border-radius:14px;
-  display:flex;
-  gap:15px;
-  align-items:flex-start;
-  background:#f0fdf4;
+    padding:18px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:flex-start;
+
+    background:#f0fdf4;
 }
 
 .analysis-icon{
-  font-size:32px;
+    font-size:32px;
 }
 
 .analysis-title{
-  font-size:17px;
-  font-weight:800;
+    font-size:18px;
+
+    font-weight:800;
 }
 
 .analysis-text{
-  color:var(--muted);
-  margin-top:5px;
-  line-height:1.6;
+    color:#475569;
+
+    margin-top:7px;
+
+    line-height:1.7;
 }
 
+.problem-list{
+    display:grid;
+
+    gap:10px;
+
+    margin-top:17px;
+}
+
+.problem-item{
+    padding:13px 15px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:11px;
+
+    line-height:1.55;
+
+    font-size:14px;
+}
+
+.problem-good{
+    background:#f0fdf4;
+
+    color:#166534;
+}
+
+.problem-warn{
+    background:#fffbeb;
+
+    color:#92400e;
+}
+
+.problem-bad{
+    background:#fef2f2;
+
+    color:#991b1b;
+}
+
+.problem-icon{
+    font-size:19px;
+}
+
+/* =========================
+   RECOMMENDATIONS
+========================= */
+
 .recommend-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:13px;
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:13px;
 }
 
 .recommend{
-  background:#f8fafc;
-  border:1px solid #edf1f5;
-  border-radius:14px;
-  padding:16px;
+    background:#f8fafc;
+
+    border:
+        1px solid
+        #edf1f5;
+
+    border-radius:14px;
+
+    padding:16px;
 }
 
 .recommend-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
+
+    gap:10px;
 }
 
 .recommend-name{
-  font-weight:700;
+    font-weight:700;
 }
 
 .control-state{
-  font-size:11px;
-  font-weight:700;
-  border-radius:20px;
-  padding:5px 9px;
+    font-size:11px;
+
+    font-weight:700;
+
+    border-radius:20px;
+
+    padding:5px 9px;
+
+    white-space:nowrap;
 }
 
 .control-normal{
-  background:#dcfce7;
-  color:#15803d;
+    background:#dcfce7;
+
+    color:#15803d;
 }
 
 .control-action{
-  background:#fef3c7;
-  color:#a16207;
+    background:#fef3c7;
+
+    color:#a16207;
+}
+
+.control-danger{
+    background:#fee2e2;
+
+    color:#b91c1c;
 }
 
 .recommend-text{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:10px;
-  line-height:1.5;
+    color:var(--muted);
+
+    font-size:13px;
+
+    margin-top:10px;
+
+    line-height:1.6;
 }
 
+/* =========================
+   CHART
+========================= */
+
 .chart-tabs{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-bottom:17px;
+    display:flex;
+
+    gap:7px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:17px;
 }
 
 .chart-tab{
-  border:1px solid #dbe3ec;
-  background:white;
-  color:#475569;
-  border-radius:9px;
-  padding:8px 12px;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:600;
+    border:
+        1px solid
+        #dbe3ec;
+
+    background:white;
+
+    color:#475569;
+
+    border-radius:9px;
+
+    padding:
+        8px 12px;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    font-weight:600;
 }
 
 .chart-tab:hover{
-  background:#f1f5f9;
+    background:#f1f5f9;
 }
 
 .chart-tab.active{
-  background:#2563eb;
-  color:white;
-  border-color:#2563eb;
+    background:#2563eb;
+
+    color:white;
+
+    border-color:#2563eb;
 }
 
 .chart-wrap{
-  position:relative;
-  height:350px;
+    position:relative;
+
+    height:350px;
 }
 
+/* =========================
+   BOTTOM
+========================= */
+
 .bottom-grid{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:20px;
+    display:grid;
+
+    grid-template-columns:
+        1.2fr 1fr;
+
+    gap:20px;
 }
 
 .activity-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
 }
 
 .activity{
-  background:#f8fafc;
-  border-radius:11px;
-  padding:11px 13px;
-  display:grid;
-  grid-template-columns:80px 1fr auto;
-  gap:10px;
-  align-items:center;
-  font-size:13px;
+    background:#f8fafc;
+
+    border-radius:11px;
+
+    padding:
+        11px 13px;
+
+    display:grid;
+
+    grid-template-columns:
+        85px 1fr auto;
+
+    gap:10px;
+
+    align-items:center;
+
+    font-size:13px;
 }
 
 .activity-time{
-  color:var(--muted);
+    color:var(--muted);
 }
 
 .activity-status{
-  color:var(--green);
-  font-weight:700;
-  font-size:11px;
+    font-weight:700;
+
+    font-size:11px;
+}
+
+.activity-normal{
+    color:#15803d;
+}
+
+.activity-warning{
+    color:#a16207;
 }
 
 .info-list{
-  display:grid;
-  gap:9px;
+    display:grid;
+
+    gap:9px;
 }
 
 .info-row{
-  background:#f8fafc;
-  padding:11px 13px;
-  border-radius:10px;
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  font-size:13px;
+    background:#f8fafc;
+
+    padding:
+        11px 13px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    gap:15px;
+
+    font-size:13px;
 }
 
 .info-row span:first-child{
-  color:var(--muted);
+    color:var(--muted);
 }
 
 .info-row span:last-child{
-  font-weight:700;
-  text-align:right;
+    font-weight:700;
+
+    text-align:right;
 }
 
+/* =========================
+   ARCHITECTURE
+========================= */
+
 .architecture{
-  margin-top:20px;
-  padding:20px;
-  border-radius:16px;
-  background:linear-gradient(120deg,#eff6ff,#ecfeff);
-  border:1px solid #dbeafe;
+    margin-top:20px;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #eff6ff,
+            #ecfeff
+        );
+
+    border:
+        1px solid
+        #dbeafe;
 }
 
 .architecture h3{
-  margin:0 0 16px;
+    margin:
+        0 0 16px;
 }
 
 .flow{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:9px;
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:9px;
 }
 
 .flow-box{
-  background:white;
-  border:1px solid #dbeafe;
-  padding:10px 14px;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:700;
+    background:white;
+
+    border:
+        1px solid
+        #dbeafe;
+
+    padding:
+        10px 14px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    font-weight:700;
 }
 
 .arrow{
-  color:#3b82f6;
-  font-weight:bold;
+    color:#3b82f6;
+
+    font-weight:bold;
 }
 
 footer{
-  text-align:center;
-  color:#94a3b8;
-  margin-top:30px;
-  font-size:12px;
-  line-height:1.8;
+    text-align:center;
+
+    color:#94a3b8;
+
+    margin-top:30px;
+
+    font-size:12px;
+
+    line-height:1.8;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media(max-width:900px){
-  .top-grid,
-  .bottom-grid{
-    grid-template-columns:1fr;
-  }
 
-  .sensor-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+    .top-grid,
+    .bottom-grid{
+        grid-template-columns:1fr;
+    }
 
-  .recommend-grid{
-    grid-template-columns:1fr;
-  }
+    .sensor-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .recommend-grid{
+        grid-template-columns:1fr;
+    }
 }
 
 @media(max-width:600px){
-  .sensor-grid,
-  .health-grid{
-    grid-template-columns:1fr;
-  }
 
-  .brand h1{
-    font-size:24px;
-  }
+    .sensor-grid,
+    .health-grid{
+        grid-template-columns:1fr;
+    }
 
-  .score-card{
-    align-items:flex-start;
-  }
+    .brand h1{
+        font-size:24px;
+    }
 
-  .activity{
-    grid-template-columns:1fr;
-  }
+    .score-card{
+        align-items:flex-start;
+    }
+
+    .activity{
+        grid-template-columns:1fr;
+    }
 }
 </style>
 </head>
 
+
 <body>
 
 <header>
-  <div class="header-inner">
+
+<div class="header-inner">
 
     <div class="brand">
-      <h1>🏫 Smart Classroom 103</h1>
-      <p>Realtime IoT Environmental Monitoring & Smart Recommendation System</p>
+
+        <h1>
+            🏫 Smart Classroom 103
+        </h1>
+
+        <p>
+            ระบบติดตามและวิเคราะห์
+            สภาพแวดล้อมห้องเรียนแบบเรียลไทม์
+        </p>
+
     </div>
+
 
     <div class="live-badges">
 
-      <div class="live-badge">
-        <span id="firebaseDot" class="dot"></span>
-        <span id="firebaseText">Firebase...</span>
-      </div>
+        <div class="live-badge">
 
-      <div class="live-badge">
-        <span id="espDot" class="dot"></span>
-        <span id="espText">ESP32...</span>
-      </div>
+            <span
+                id="firebaseDot"
+                class="dot">
+            </span>
 
-      <div class="live-badge">
-        <span id="streamDot" class="dot"></span>
-        <span id="streamText">Data Stream...</span>
-      </div>
+            <span id="firebaseText">
+                Firebase...
+            </span>
+
+        </div>
+
+
+        <div class="live-badge">
+
+            <span
+                id="espDot"
+                class="dot">
+            </span>
+
+            <span id="espText">
+                ESP32...
+            </span>
+
+        </div>
+
+
+        <div class="live-badge">
+
+            <span
+                id="streamDot"
+                class="dot">
+            </span>
+
+            <span id="streamText">
+                Data Stream...
+            </span>
+
+        </div>
 
     </div>
 
-  </div>
+</div>
+
 </header>
 
 
 <main>
 
+
+<!-- SYSTEM HEALTH -->
+
 <div class="top-grid">
 
-  <div class="system-card">
-    <h2>⚡ System Health</h2>
+    <div class="system-card">
 
-    <div class="health-grid">
+        <h2>
+            ⚡ สถานะระบบ
+        </h2>
 
-      <div class="health-item">
-        <div class="health-label">DATABASE</div>
-        <div class="health-value">
-          <span id="dbMiniDot" class="dot"></span>
-          <span id="dbMini">Connecting</span>
+
+        <div class="health-grid">
+
+            <div class="health-item">
+
+                <div class="health-label">
+                    FIREBASE DATABASE
+                </div>
+
+                <div class="health-value">
+
+                    <span
+                        id="dbMiniDot"
+                        class="dot">
+                    </span>
+
+                    <span id="dbMini">
+                        กำลังเชื่อมต่อ
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-item">
+
+                <div class="health-label">
+                    ESP32 DEVICE
+                </div>
+
+                <div class="health-value">
+
+                    <span
+                        id="deviceMiniDot"
+                        class="dot">
+                    </span>
+
+                    <span id="deviceMini">
+                        กำลังตรวจสอบ
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-item">
+
+                <div class="health-label">
+                    HISTORY RECORDS
+                </div>
+
+                <div class="health-value">
+
+                    📊
+
+                    <span id="recordCount">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
-      </div>
-
-      <div class="health-item">
-        <div class="health-label">ESP32 DEVICE</div>
-        <div class="health-value">
-          <span id="deviceMiniDot" class="dot"></span>
-          <span id="deviceMini">Checking</span>
-        </div>
-      </div>
-
-      <div class="health-item">
-        <div class="health-label">HISTORY RECORDS</div>
-        <div class="health-value">
-          📊 <span id="recordCount">--</span>
-        </div>
-      </div>
 
     </div>
-  </div>
 
 
-  <div class="score-card">
+    <!-- SCORE -->
 
-    <div>
-      <h2>Classroom Score</h2>
+    <div class="score-card">
 
-      <div class="score-number">
-        <span id="score">--</span><small>/100</small>
-      </div>
+        <div>
 
-      <div class="score-label" id="scoreLabel">
-        Waiting for data
-      </div>
+            <h2>
+                Environment Score
+            </h2>
+
+            <div class="score-number">
+
+                <span id="score">
+                    --
+                </span>
+
+                <small>
+                    /100
+                </small>
+
+            </div>
+
+            <div
+                class="score-label"
+                id="scoreLabel">
+
+                กำลังรอข้อมูล
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="score-ring"
+            id="scoreRing">
+
+            ⏳
+
+        </div>
+
     </div>
-
-    <div class="score-ring" id="scoreRing">
-      ⏳
-    </div>
-
-  </div>
 
 </div>
 
 
-<div class="section-title">
-  <h2>Realtime Classroom Data</h2>
+<!-- REALTIME DATA -->
 
-  <div class="last-update">
-    Last sensor update:
-    <b id="lastUpdate">Waiting...</b>
-  </div>
+<div class="section-title">
+
+    <h2>
+        📡 ข้อมูลห้องเรียนแบบเรียลไทม์
+    </h2>
+
+    <div class="last-update">
+
+        อัปเดตล่าสุด:
+
+        <b id="lastUpdate">
+            กำลังรอข้อมูล...
+        </b>
+
+    </div>
+
 </div>
 
 
 <div class="sensor-grid">
 
-  <div class="sensor-card">
+
+<!-- TEMP -->
+
+<div class="sensor-card">
+
     <div class="sensor-head">
-      <span class="sensor-icon">🌡️</span>
-      <span class="sensor-name">TEMPERATURE</span>
+
+        <span class="sensor-icon">
+            🌡️
+        </span>
+
+        <span class="sensor-name">
+            อุณหภูมิ
+        </span>
+
     </div>
+
 
     <div class="sensor-value">
-      <span id="temp">--</span>
-      <span class="sensor-unit">°C</span>
+
+        <span id="temp">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            °C
+        </span>
+
     </div>
 
-    <span id="tempState" class="state">Waiting</span>
-  </div>
 
+    <span
+        id="tempState"
+        class="state">
 
-  <div class="sensor-card">
-    <div class="sensor-head">
-      <span class="sensor-icon">💧</span>
-      <span class="sensor-name">HUMIDITY</span>
-    </div>
+        กำลังรอข้อมูล
 
-    <div class="sensor-value">
-      <span id="humi">--</span>
-      <span class="sensor-unit">%</span>
-    </div>
-
-    <span id="humiState" class="state">Waiting</span>
-  </div>
-
-
-  <div class="sensor-card">
-    <div class="sensor-head">
-      <span class="sensor-icon">💡</span>
-      <span class="sensor-name">LIGHT LEVEL</span>
-    </div>
-
-    <div class="sensor-value">
-      <span id="light">--</span>
-      <span class="sensor-unit">lux</span>
-    </div>
-
-    <span id="lightState" class="state">Waiting</span>
-  </div>
-
-
-  <div class="sensor-card">
-    <div class="sensor-head">
-      <span class="sensor-icon">☁️</span>
-      <span class="sensor-name">CO₂</span>
-    </div>
-
-    <div class="sensor-value">
-      <span id="co2">--</span>
-      <span class="sensor-unit">ppm</span>
-    </div>
-
-    <span id="co2State" class="state">Waiting</span>
-  </div>
-
-
-  <div class="sensor-card">
-    <div class="sensor-head">
-      <span class="sensor-icon">🍃</span>
-      <span class="sensor-name">AIR QUALITY</span>
-    </div>
-
-    <div class="sensor-value">
-      <span id="aqi">--</span>
-      <span class="sensor-unit">AQI</span>
-    </div>
-
-    <span id="aqiState" class="state">Waiting</span>
-  </div>
-
-
-  <div class="sensor-card">
-    <div class="sensor-head">
-      <span class="sensor-icon">👥</span>
-      <span class="sensor-name">OCCUPANCY</span>
-    </div>
-
-    <div class="sensor-value">
-      <span id="people">--</span>
-      <span class="sensor-unit">people</span>
-    </div>
-
-    <span id="peopleState" class="state">Waiting</span>
-  </div>
+    </span>
 
 </div>
 
 
+<!-- HUMIDITY -->
+
+<div class="sensor-card">
+
+    <div class="sensor-head">
+
+        <span class="sensor-icon">
+            💧
+        </span>
+
+        <span class="sensor-name">
+            ความชื้น
+        </span>
+
+    </div>
+
+
+    <div class="sensor-value">
+
+        <span id="humi">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            %
+        </span>
+
+    </div>
+
+
+    <span
+        id="humiState"
+        class="state">
+
+        กำลังรอข้อมูล
+
+    </span>
+
+</div>
+
+
+<!-- LIGHT -->
+
+<div class="sensor-card">
+
+    <div class="sensor-head">
+
+        <span class="sensor-icon">
+            💡
+        </span>
+
+        <span class="sensor-name">
+            ความสว่าง
+        </span>
+
+    </div>
+
+
+    <div class="sensor-value">
+
+        <span id="light">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            lux
+        </span>
+
+    </div>
+
+
+    <span
+        id="lightState"
+        class="state">
+
+        กำลังรอข้อมูล
+
+    </span>
+
+</div>
+
+
+<!-- CO2 -->
+
+<div class="sensor-card">
+
+    <div class="sensor-head">
+
+        <span class="sensor-icon">
+            ☁️
+        </span>
+
+        <span class="sensor-name">
+            CO₂
+        </span>
+
+    </div>
+
+
+    <div class="sensor-value">
+
+        <span id="co2">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            ppm
+        </span>
+
+    </div>
+
+
+    <span
+        id="co2State"
+        class="state">
+
+        กำลังรอข้อมูล
+
+    </span>
+
+</div>
+
+
+<!-- AQI -->
+
+<div class="sensor-card">
+
+    <div class="sensor-head">
+
+        <span class="sensor-icon">
+            🍃
+        </span>
+
+        <span class="sensor-name">
+            คุณภาพอากาศ
+        </span>
+
+    </div>
+
+
+    <div class="sensor-value">
+
+        <span id="aqi">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            AQI
+        </span>
+
+    </div>
+
+
+    <span
+        id="aqiState"
+        class="state">
+
+        กำลังรอข้อมูล
+
+    </span>
+
+</div>
+
+
+<!-- PEOPLE -->
+
+<div class="sensor-card">
+
+    <div class="sensor-head">
+
+        <span class="sensor-icon">
+            👥
+        </span>
+
+        <span class="sensor-name">
+            จำนวนคน
+        </span>
+
+    </div>
+
+
+    <div class="sensor-value">
+
+        <span id="people">
+            --
+        </span>
+
+        <span class="sensor-unit">
+            คน
+        </span>
+
+    </div>
+
+
+    <span
+        id="peopleState"
+        class="state">
+
+        กำลังรอข้อมูล
+
+    </span>
+
+</div>
+
+</div>
+
+
+<!-- SMART ANALYSIS -->
+
 <div class="panel">
 
-  <h2>🧠 Smart Classroom Analysis</h2>
+<h2>
+    🧠 วิเคราะห์สภาพห้องเรียน
+</h2>
 
-  <div class="analysis" id="analysisBox">
 
-    <div class="analysis-icon" id="analysisIcon">
-      ⏳
+<div
+    class="analysis"
+    id="analysisBox">
+
+
+    <div
+        class="analysis-icon"
+        id="analysisIcon">
+
+        ⏳
+
     </div>
+
 
     <div>
-      <div class="analysis-title" id="analysisTitle">
-        Waiting for sensor data
-      </div>
 
-      <div class="analysis-text" id="analysisText">
-        The monitoring system is preparing the classroom analysis.
-      </div>
+        <div
+            class="analysis-title"
+            id="analysisTitle">
+
+            กำลังวิเคราะห์ข้อมูล
+
+        </div>
+
+
+        <div
+            class="analysis-text"
+            id="analysisText">
+
+            ระบบกำลังรอข้อมูลจาก ESP32
+            เพื่อวิเคราะห์สภาพแวดล้อมภายในห้องเรียน
+
+        </div>
+
     </div>
-
-  </div>
 
 </div>
 
+
+<div
+    class="problem-list"
+    id="problemList">
+
+</div>
+
+</div>
+
+
+<!-- RECOMMENDATIONS -->
 
 <div class="panel">
 
-  <h2>⚙️ Smart Control Recommendations</h2>
+<h2>
+    💡 คำแนะนำสำหรับห้องเรียน
+</h2>
 
-  <div class="recommend-grid">
 
-    <div class="recommend">
-      <div class="recommend-top">
-        <div class="recommend-name">❄️ Cooling</div>
-        <div id="coolState" class="control-state control-normal">
-          NORMAL
+<div class="recommend-grid">
+
+
+<!-- COOLING -->
+
+<div class="recommend">
+
+    <div class="recommend-top">
+
+        <div class="recommend-name">
+            ❄️ อุณหภูมิ / ระบบทำความเย็น
         </div>
-      </div>
 
-      <div id="coolText" class="recommend-text">
-        Monitoring classroom temperature.
-      </div>
+        <div
+            id="coolState"
+            class="control-state control-normal">
+
+            ปกติ
+
+        </div>
+
     </div>
 
 
-    <div class="recommend">
-      <div class="recommend-top">
-        <div class="recommend-name">🌬️ Ventilation</div>
-        <div id="ventState" class="control-state control-normal">
-          NORMAL
-        </div>
-      </div>
+    <div
+        id="coolText"
+        class="recommend-text">
 
-      <div id="ventText" class="recommend-text">
-        Monitoring CO₂ and air quality.
-      </div>
+        กำลังตรวจสอบอุณหภูมิ
+
     </div>
-
-
-    <div class="recommend">
-      <div class="recommend-top">
-        <div class="recommend-name">💡 Lighting</div>
-        <div id="lightControlState" class="control-state control-normal">
-          NORMAL
-        </div>
-      </div>
-
-      <div id="lightControlText" class="recommend-text">
-        Monitoring classroom lighting.
-      </div>
-    </div>
-
-  </div>
 
 </div>
 
+
+<!-- VENTILATION -->
+
+<div class="recommend">
+
+    <div class="recommend-top">
+
+        <div class="recommend-name">
+            🌬️ การระบายอากาศ
+        </div>
+
+        <div
+            id="ventState"
+            class="control-state control-normal">
+
+            ปกติ
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="ventText"
+        class="recommend-text">
+
+        กำลังตรวจสอบ CO₂
+        และคุณภาพอากาศ
+
+    </div>
+
+</div>
+
+
+<!-- LIGHT -->
+
+<div class="recommend">
+
+    <div class="recommend-top">
+
+        <div class="recommend-name">
+            💡 ระบบแสงสว่าง
+        </div>
+
+        <div
+            id="lightControlState"
+            class="control-state control-normal">
+
+            ปกติ
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="lightControlText"
+        class="recommend-text">
+
+        กำลังตรวจสอบความสว่าง
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CHART -->
 
 <div class="panel">
 
-  <h2>📈 Sensor History</h2>
+<h2>
+    📈 ประวัติข้อมูลเซนเซอร์
+</h2>
 
-  <div class="chart-tabs">
 
-    <button class="chart-tab active"
-            onclick="selectChart('temp',this)">
-      Temperature
-    </button>
+<div class="chart-tabs">
 
-    <button class="chart-tab"
-            onclick="selectChart('humi',this)">
-      Humidity
-    </button>
+<button
+    class="chart-tab active"
+    onclick="selectChart('temp',this)">
 
-    <button class="chart-tab"
-            onclick="selectChart('co2',this)">
-      CO₂
-    </button>
+    อุณหภูมิ
 
-    <button class="chart-tab"
-            onclick="selectChart('air_quality',this)">
-      AQI
-    </button>
+</button>
 
-    <button class="chart-tab"
-            onclick="selectChart('light',this)">
-      Light
-    </button>
 
-    <button class="chart-tab"
-            onclick="selectChart('people',this)">
-      People
-    </button>
+<button
+    class="chart-tab"
+    onclick="selectChart('humi',this)">
 
-  </div>
+    ความชื้น
 
-  <div class="chart-wrap">
-    <canvas id="historyChart"></canvas>
-  </div>
+</button>
+
+
+<button
+    class="chart-tab"
+    onclick="selectChart('co2',this)">
+
+    CO₂
+
+</button>
+
+
+<button
+    class="chart-tab"
+    onclick="selectChart('air_quality',this)">
+
+    AQI
+
+</button>
+
+
+<button
+    class="chart-tab"
+    onclick="selectChart('light',this)">
+
+    ความสว่าง
+
+</button>
+
+
+<button
+    class="chart-tab"
+    onclick="selectChart('people',this)">
+
+    จำนวนคน
+
+</button>
 
 </div>
 
+
+<div class="chart-wrap">
+
+    <canvas id="historyChart">
+    </canvas>
+
+</div>
+
+</div>
+
+
+<!-- BOTTOM -->
 
 <div class="bottom-grid">
 
-  <div class="panel">
 
-    <h2>🕒 Recent Activity</h2>
+<div class="panel">
 
-    <div class="activity-list" id="activityList">
-      Waiting for history data...
-    </div>
+<h2>
+    🕒 ข้อมูลล่าสุด
+</h2>
 
-  </div>
+<div
+    class="activity-list"
+    id="activityList">
 
+    กำลังรอข้อมูลย้อนหลัง...
 
-  <div class="panel">
-
-    <h2>ℹ️ System Information</h2>
-
-    <div class="info-list">
-
-      <div class="info-row">
-        <span>Database</span>
-        <span>iot-103</span>
-      </div>
-
-      <div class="info-row">
-        <span>Device</span>
-        <span>ESP32</span>
-      </div>
-
-      <div class="info-row">
-        <span>IoT Platform</span>
-        <span>ESPHome</span>
-      </div>
-
-      <div class="info-row">
-        <span>Realtime Storage</span>
-        <span>Firebase RTDB</span>
-      </div>
-
-      <div class="info-row">
-        <span>Data Nodes</span>
-        <span>latest / history</span>
-      </div>
-
-      <div class="info-row">
-        <span>Dashboard Hosting</span>
-        <span>GitHub Pages</span>
-      </div>
-
-      <div class="info-row">
-        <span>Update Interval</span>
-        <span>10 seconds</span>
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
+<div class="panel">
+
+<h2>
+    ℹ️ ข้อมูลระบบ
+</h2>
+
+
+<div class="info-list">
+
+
+<div class="info-row">
+
+    <span>
+        Database
+    </span>
+
+    <span>
+        iot-103
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        Device
+    </span>
+
+    <span>
+        ESP32
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        IoT Platform
+    </span>
+
+    <span>
+        ESPHome
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        Realtime Database
+    </span>
+
+    <span>
+        Firebase RTDB
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        Data Nodes
+    </span>
+
+    <span>
+        latest / history
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        Web Hosting
+    </span>
+
+    <span>
+        GitHub Pages
+    </span>
+
+</div>
+
+
+<div class="info-row">
+
+    <span>
+        Dashboard Refresh
+    </span>
+
+    <span>
+        ทุก 5 วินาที
+    </span>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ARCHITECTURE -->
+
 <div class="architecture">
 
-  <h3>🔗 IoT System Architecture</h3>
+<h3>
+    🔗 โครงสร้างการทำงานของระบบ IoT
+</h3>
 
-  <div class="flow">
 
-    <div class="flow-box">ESP32</div>
-    <div class="arrow">→</div>
+<div class="flow">
 
-    <div class="flow-box">ESPHome</div>
-    <div class="arrow">→</div>
+    <div class="flow-box">
+        ESP32
+    </div>
 
-    <div class="flow-box">Firebase RTDB</div>
-    <div class="arrow">→</div>
+    <div class="arrow">
+        →
+    </div>
 
-    <div class="flow-box">GitHub Pages</div>
-    <div class="arrow">→</div>
+    <div class="flow-box">
+        ESPHome
+    </div>
 
-    <div class="flow-box">Web Dashboard</div>
+    <div class="arrow">
+        →
+    </div>
 
-  </div>
+    <div class="flow-box">
+        Firebase RTDB
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+    <div class="flow-box">
+        GitHub Pages
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+    <div class="flow-box">
+        Web Dashboard
+    </div>
+
+</div>
 
 </div>
 
 
 <footer>
-Smart Classroom 103 — IoT Realtime Monitoring System<br>
-ESP32 • ESPHome • Firebase Realtime Database • GitHub Pages
+
+Smart Classroom 103<br>
+
+ระบบติดตามและวิเคราะห์
+สภาพแวดล้อมห้องเรียนแบบเรียลไทม์<br>
+
+ESP32 • ESPHome •
+Firebase Realtime Database •
+GitHub Pages
+
 </footer>
+
 
 </main>
 
 
 <script>
+
+/* ==========================================
+   FIREBASE CONFIG
+========================================== */
 
 const DB =
 "https://iot-103-default-rtdb.asia-southeast1.firebasedatabase.app";
@@ -957,1092 +1781,1873 @@ DB + "/lab/esp32-01/latest.json";
 const HISTORY =
 DB + "/lab/esp32-01/history.json";
 
+
+/*
+ถ้าไม่มีข้อมูลใหม่เกิน 30 วินาที
+ให้ถือว่า ESP32 Offline
+*/
+
 const OFFLINE_SECONDS = 30;
 
+
 let newestTimestamp = 0;
+
 let historyData = [];
+
 let selectedSensor = "temp";
 
 
+/* ==========================================
+   SENSOR CONFIG
+========================================== */
+
 const SENSOR_CONFIG = {
 
-  temp:{
-    label:"Temperature",
-    unit:"°C"
-  },
+    temp:{
+        label:"อุณหภูมิ",
+        unit:"°C"
+    },
 
-  humi:{
-    label:"Humidity",
-    unit:"%"
-  },
+    humi:{
+        label:"ความชื้น",
+        unit:"%"
+    },
 
-  co2:{
-    label:"CO₂",
-    unit:"ppm"
-  },
+    co2:{
+        label:"CO₂",
+        unit:"ppm"
+    },
 
-  air_quality:{
-    label:"Air Quality",
-    unit:"AQI"
-  },
+    air_quality:{
+        label:"คุณภาพอากาศ",
+        unit:"AQI"
+    },
 
-  light:{
-    label:"Light Level",
-    unit:"lux"
-  },
+    light:{
+        label:"ความสว่าง",
+        unit:"lux"
+    },
 
-  people:{
-    label:"People",
-    unit:"people"
-  }
+    people:{
+        label:"จำนวนคน",
+        unit:"คน"
+    }
 
 };
 
 
-function setState(id,text,type){
+/* ==========================================
+   SENSOR STATE
+========================================== */
 
-  const el =
-    document.getElementById(id);
+function setState(
+    id,
+    text,
+    type
+){
 
-  el.textContent = text;
-  el.className = "state " + type;
+    const el =
+        document.getElementById(id);
+
+    el.textContent =
+        text;
+
+    el.className =
+        "state " + type;
 
 }
 
+
+/* ==========================================
+   FIREBASE STATUS
+========================================== */
 
 function setFirebaseStatus(online){
 
-  document.getElementById("firebaseDot").className =
-    online ? "dot green" : "dot red";
+    document
+        .getElementById("firebaseDot")
+        .className =
+        online
+        ? "dot green"
+        : "dot red";
 
-  document.getElementById("firebaseText").textContent =
-    online ? "Firebase Connected" : "Firebase Error";
 
-  document.getElementById("dbMiniDot").className =
-    online ? "dot green" : "dot red";
+    document
+        .getElementById("firebaseText")
+        .textContent =
+        online
+        ? "Firebase เชื่อมต่อแล้ว"
+        : "Firebase เชื่อมต่อไม่ได้";
 
-  document.getElementById("dbMini").textContent =
-    online ? "Connected" : "Error";
+
+    document
+        .getElementById("dbMiniDot")
+        .className =
+        online
+        ? "dot green"
+        : "dot red";
+
+
+    document
+        .getElementById("dbMini")
+        .textContent =
+        online
+        ? "เชื่อมต่อแล้ว"
+        : "เกิดข้อผิดพลาด";
 
 }
 
+
+/* ==========================================
+   ESP32 STATUS
+========================================== */
 
 function setDeviceStatus(online){
 
-  document.getElementById("espDot").className =
-    online ? "dot green" : "dot red";
+    document
+        .getElementById("espDot")
+        .className =
+        online
+        ? "dot green"
+        : "dot red";
 
-  document.getElementById("espText").textContent =
-    online ? "ESP32 Online • LIVE" : "ESP32 Offline";
 
-  document.getElementById("deviceMiniDot").className =
-    online ? "dot green" : "dot red";
+    document
+        .getElementById("espText")
+        .textContent =
+        online
+        ? "ESP32 ออนไลน์ • LIVE"
+        : "ESP32 ออฟไลน์";
 
-  document.getElementById("deviceMini").textContent =
-    online ? "Online" : "Offline";
 
-  document.getElementById("streamDot").className =
-    online ? "dot green" : "dot red";
+    document
+        .getElementById("deviceMiniDot")
+        .className =
+        online
+        ? "dot green"
+        : "dot red";
 
-  document.getElementById("streamText").textContent =
-    online ? "Realtime Stream • LIVE" : "Data Stream Stopped";
+
+    document
+        .getElementById("deviceMini")
+        .textContent =
+        online
+        ? "ออนไลน์"
+        : "ออฟไลน์";
+
+
+    document
+        .getElementById("streamDot")
+        .className =
+        online
+        ? "dot green"
+        : "dot red";
+
+
+    document
+        .getElementById("streamText")
+        .textContent =
+        online
+        ? "ข้อมูลเรียลไทม์ • LIVE"
+        : "ข้อมูลหยุดอัปเดต";
 
 }
 
+
+/* ==========================================
+   CHECK ESP32
+========================================== */
 
 function checkDeviceStatus(){
 
-  if(!newestTimestamp){
+    if(!newestTimestamp){
 
-    setDeviceStatus(false);
-    return;
+        setDeviceStatus(false);
 
-  }
+        return;
 
-  const now =
-    Math.floor(Date.now()/1000);
+    }
 
-  const age =
-    now - newestTimestamp;
 
-  setDeviceStatus(
-    age <= OFFLINE_SECONDS
-  );
+    const now =
+        Math.floor(
+            Date.now()/1000
+        );
+
+
+    const age =
+        now -
+        newestTimestamp;
+
+
+    setDeviceStatus(
+        age <=
+        OFFLINE_SECONDS
+    );
 
 }
 
+
+/* ==========================================
+   ENVIRONMENT SCORE
+========================================== */
 
 function calculateScore(d){
 
-  let score = 100;
-
-  const temp = Number(d.temp);
-  const humi = Number(d.humi);
-  const light = Number(d.light);
-  const co2 = Number(d.co2);
-  const aqi = Number(d.air_quality);
-  const people = Number(d.people);
+    let score = 100;
 
 
-  if(temp < 24 || temp > 28){
-    score -= 8;
-  }
+    const temp =
+        Number(d.temp);
 
-  if(temp < 22 || temp > 30){
-    score -= 7;
-  }
+    const humi =
+        Number(d.humi);
 
+    const light =
+        Number(d.light);
 
-  if(humi < 45 || humi > 65){
-    score -= 8;
-  }
+    const co2 =
+        Number(d.co2);
 
+    const aqi =
+        Number(d.air_quality);
 
-  if(light < 300 || light > 700){
-    score -= 8;
-  }
-
-
-  if(co2 >= 1000){
-    score -= 12;
-  }
-
-  if(co2 >= 1500){
-    score -= 13;
-  }
+    const people =
+        Number(d.people);
 
 
-  if(aqi > 50){
-    score -= 10;
-  }
+    /* Temperature */
 
-  if(aqi > 100){
-    score -= 15;
-  }
+    if(
+        temp < 24 ||
+        temp > 28
+    ){
+
+        score -= 8;
+
+    }
+
+    if(
+        temp < 22 ||
+        temp > 30
+    ){
+
+        score -= 7;
+
+    }
 
 
-  if(people > 30){
-    score -= 8;
-  }
+    /* Humidity */
+
+    if(
+        humi < 45 ||
+        humi > 65
+    ){
+
+        score -= 8;
+
+    }
 
 
-  if(score < 0){
-    score = 0;
-  }
+    /* Lighting */
 
-  return score;
+    if(
+        light < 300 ||
+        light > 700
+    ){
+
+        score -= 8;
+
+    }
+
+
+    /* CO2 */
+
+    if(co2 >= 1000){
+
+        score -= 12;
+
+    }
+
+    if(co2 >= 1500){
+
+        score -= 13;
+
+    }
+
+
+    /* AQI */
+
+    if(aqi > 50){
+
+        score -= 10;
+
+    }
+
+    if(aqi > 100){
+
+        score -= 15;
+
+    }
+
+
+    /* People */
+
+    if(people > 30){
+
+        score -= 8;
+
+    }
+
+
+    if(score < 0){
+
+        score = 0;
+
+    }
+
+
+    return score;
 
 }
 
+
+/* ==========================================
+   UPDATE SCORE
+========================================== */
 
 function updateScore(d){
 
-  const score =
-    calculateScore(d);
-
-  document.getElementById("score").textContent =
-    score;
-
-  const label =
-    document.getElementById("scoreLabel");
-
-  const ring =
-    document.getElementById("scoreRing");
+    const score =
+        calculateScore(d);
 
 
-  if(score >= 90){
+    document
+        .getElementById("score")
+        .textContent =
+        score;
 
-    label.textContent = "EXCELLENT";
-    label.style.color = "#15803d";
-    ring.textContent = "🌟";
-    ring.style.background = "#ecfdf5";
 
-  }
+    const label =
+        document
+        .getElementById(
+            "scoreLabel"
+        );
 
-  else if(score >= 75){
 
-    label.textContent = "GOOD";
-    label.style.color = "#15803d";
-    ring.textContent = "✅";
-    ring.style.background = "#ecfdf5";
+    const ring =
+        document
+        .getElementById(
+            "scoreRing"
+        );
 
-  }
 
-  else if(score >= 60){
+    if(score >= 90){
 
-    label.textContent = "NEEDS ATTENTION";
-    label.style.color = "#a16207";
-    ring.textContent = "🟡";
-    ring.style.background = "#fffbeb";
+        label.textContent =
+            "ดีเยี่ยม";
 
-  }
+        label.style.color =
+            "#15803d";
 
-  else{
+        ring.textContent =
+            "🌟";
 
-    label.textContent = "ACTION REQUIRED";
-    label.style.color = "#b91c1c";
-    ring.textContent = "⚠️";
-    ring.style.background = "#fef2f2";
+        ring.style.background =
+            "#ecfdf5";
 
-  }
+    }
+
+    else if(score >= 75){
+
+        label.textContent =
+            "ดี";
+
+        label.style.color =
+            "#15803d";
+
+        ring.textContent =
+            "✅";
+
+        ring.style.background =
+            "#ecfdf5";
+
+    }
+
+    else if(score >= 60){
+
+        label.textContent =
+            "ควรตรวจสอบ";
+
+        label.style.color =
+            "#a16207";
+
+        ring.textContent =
+            "🟡";
+
+        ring.style.background =
+            "#fffbeb";
+
+    }
+
+    else{
+
+        label.textContent =
+            "ควรปรับปรุง";
+
+        label.style.color =
+            "#b91c1c";
+
+        ring.textContent =
+            "⚠️";
+
+        ring.style.background =
+            "#fef2f2";
+
+    }
 
 }
 
+
+/* ==========================================
+   SMART ANALYSIS
+========================================== */
 
 function updateAnalysis(d){
 
-  const temp = Number(d.temp);
-  const humi = Number(d.humi);
-  const light = Number(d.light);
-  const co2 = Number(d.co2);
-  const aqi = Number(d.air_quality);
-  const people = Number(d.people);
+    const temp =
+        Number(d.temp);
 
-  const box =
-    document.getElementById("analysisBox");
+    const humi =
+        Number(d.humi);
 
-  const icon =
-    document.getElementById("analysisIcon");
+    const light =
+        Number(d.light);
 
-  const title =
-    document.getElementById("analysisTitle");
+    const co2 =
+        Number(d.co2);
 
-  const text =
-    document.getElementById("analysisText");
+    const aqi =
+        Number(d.air_quality);
 
-
-  let issues = [];
+    const people =
+        Number(d.people);
 
 
-  if(temp > 28){
-    issues.push(
-      "room temperature is above the configured comfort range"
-    );
-  }
+    const box =
+        document.getElementById(
+            "analysisBox"
+        );
 
-  if(humi > 65){
-    issues.push(
-      "humidity is relatively high"
-    );
-  }
+    const icon =
+        document.getElementById(
+            "analysisIcon"
+        );
 
-  if(light < 300){
-    issues.push(
-      "classroom lighting is insufficient"
-    );
-  }
+    const title =
+        document.getElementById(
+            "analysisTitle"
+        );
 
-  if(co2 >= 1000){
-    issues.push(
-      "CO₂ indicates that additional ventilation may be useful"
-    );
-  }
+    const text =
+        document.getElementById(
+            "analysisText"
+        );
 
-  if(aqi > 50){
-    issues.push(
-      "air quality requires attention"
-    );
-  }
-
-  if(people > 30){
-    issues.push(
-      "classroom occupancy is high"
-    );
-  }
+    const problemList =
+        document.getElementById(
+            "problemList"
+        );
 
 
-  if(issues.length === 0){
+    let problems = [];
 
-    box.style.background =
-      "#f0fdf4";
+    let serious = false;
 
-    icon.textContent =
-      "✅";
 
-    title.textContent =
-      "Classroom Environment is Good";
+    /* TEMPERATURE */
 
-    text.textContent =
-      "All monitored conditions are within the configured classroom range. No immediate environmental adjustment is recommended.";
+    if(temp > 30){
 
-  }
+        serious = true;
 
-  else if(issues.length <= 2){
+        problems.push({
 
-    box.style.background =
-      "#fffbeb";
+            type:"bad",
 
-    icon.textContent =
-      "🟡";
+            icon:"🌡️",
 
-    title.textContent =
-      "Classroom Adjustment Recommended";
+            text:
+            "อุณหภูมิสูง " +
+            temp.toFixed(1) +
+            " °C ห้องค่อนข้างร้อน ควรตรวจสอบหรือปรับระบบทำความเย็น"
 
-    text.textContent =
-      "Monitoring detected that " +
-      issues.join(" and ") +
-      ".";
+        });
 
-  }
+    }
 
-  else{
+    else if(temp > 28){
 
-    box.style.background =
-      "#fef2f2";
+        problems.push({
 
-    icon.textContent =
-      "⚠️";
+            type:"warn",
 
-    title.textContent =
-      "Multiple Conditions Require Attention";
+            icon:"🌡️",
 
-    text.textContent =
-      "Monitoring detected multiple conditions outside the configured classroom range: " +
-      issues.join(", ") +
-      ".";
+            text:
+            "อุณหภูมิ " +
+            temp.toFixed(1) +
+            " °C เริ่มสูงกว่าช่วงที่ระบบกำหนด ควรติดตามอุณหภูมิภายในห้อง"
 
-  }
+        });
+
+    }
+
+    else if(temp < 24){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"🥶",
+
+            text:
+            "อุณหภูมิ " +
+            temp.toFixed(1) +
+            " °C ค่อนข้างเย็น ควรตรวจสอบการตั้งค่าเครื่องปรับอากาศ"
+
+        });
+
+    }
+
+
+    /* HUMIDITY */
+
+    if(humi > 65){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"💧",
+
+            text:
+            "ความชื้น " +
+            humi.toFixed(1) +
+            "% ค่อนข้างสูง ควรตรวจสอบการระบายอากาศภายในห้อง"
+
+        });
+
+    }
+
+    else if(humi < 45){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"💧",
+
+            text:
+            "ความชื้น " +
+            humi.toFixed(1) +
+            "% ค่อนข้างต่ำ อากาศภายในห้องอาจแห้งเกินไป"
+
+        });
+
+    }
+
+
+    /* LIGHT */
+
+    if(light < 300){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"💡",
+
+            text:
+            "ความสว่างเพียง " +
+            Math.round(light) +
+            " lux ห้องค่อนข้างมืด ควรเปิดไฟหรือเพิ่มแสงสว่าง"
+
+        });
+
+    }
+
+    else if(light > 700){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"☀️",
+
+            text:
+            "ความสว่าง " +
+            Math.round(light) +
+            " lux ค่อนข้างสูง สามารถลดแสงที่ไม่จำเป็นได้"
+
+        });
+
+    }
+
+
+    /* CO2 */
+
+    if(co2 >= 1500){
+
+        serious = true;
+
+        problems.push({
+
+            type:"bad",
+
+            icon:"🌬️",
+
+            text:
+            "CO₂ สูงถึง " +
+            Math.round(co2) +
+            " ppm ควรเพิ่มการระบายอากาศ เช่น เปิดประตู หน้าต่าง หรือเพิ่มการถ่ายเทอากาศ"
+
+        });
+
+    }
+
+    else if(co2 >= 1000){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"🌬️",
+
+            text:
+            "CO₂ อยู่ที่ " +
+            Math.round(co2) +
+            " ppm เริ่มสูง ควรเพิ่มการระบายอากาศภายในห้อง"
+
+        });
+
+    }
+
+
+    /* AQI */
+
+    if(aqi > 100){
+
+        serious = true;
+
+        problems.push({
+
+            type:"bad",
+
+            icon:"😷",
+
+            text:
+            "คุณภาพอากาศ AQI " +
+            Math.round(aqi) +
+            " อยู่ในระดับที่ควรตรวจสอบ ควรเพิ่มการระบายอากาศและตรวจสอบแหล่งกำเนิดมลพิษ"
+
+        });
+
+    }
+
+    else if(aqi > 50){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"🍃",
+
+            text:
+            "คุณภาพอากาศ AQI " +
+            Math.round(aqi) +
+            " อยู่ในระดับปานกลาง ควรติดตามคุณภาพอากาศอย่างต่อเนื่อง"
+
+        });
+
+    }
+
+
+    /* PEOPLE */
+
+    if(people > 30){
+
+        problems.push({
+
+            type:"warn",
+
+            icon:"👥",
+
+            text:
+            "มีผู้ใช้งานในห้อง " +
+            Math.round(people) +
+            " คน ซึ่งค่อนข้างหนาแน่น ควรติดตามค่า CO₂ และการระบายอากาศเป็นพิเศษ"
+
+        });
+
+    }
+
+
+    /* NO PROBLEM */
+
+    if(problems.length === 0){
+
+        box.style.background =
+            "#f0fdf4";
+
+        icon.textContent =
+            "✅";
+
+        title.textContent =
+            "สภาพแวดล้อมภายในห้องอยู่ในเกณฑ์ที่กำหนด";
+
+        text.textContent =
+            "ค่าที่ตรวจสอบทั้งอุณหภูมิ ความชื้น ความสว่าง CO₂ คุณภาพอากาศ และจำนวนคน ยังไม่พบค่าที่ต้องปรับปรุงในขณะนี้";
+
+
+        problemList.innerHTML =
+        `
+        <div class="problem-item problem-good">
+
+            <span class="problem-icon">
+                ✅
+            </span>
+
+            <span>
+                ไม่พบปัญหาที่ต้องดำเนินการในขณะนี้
+                สามารถใช้งานห้องเรียนได้ตามปกติ
+            </span>
+
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    /* HAS PROBLEM */
+
+    if(serious){
+
+        box.style.background =
+            "#fef2f2";
+
+        icon.textContent =
+            "⚠️";
+
+        title.textContent =
+            "พบสภาพแวดล้อมที่ควรได้รับการแก้ไข";
+
+        text.textContent =
+            "ระบบตรวจพบค่าบางรายการที่สูงหรือต่ำกว่าช่วงที่กำหนด กรุณาตรวจสอบคำแนะนำด้านล่าง";
+
+    }
+
+    else{
+
+        box.style.background =
+            "#fffbeb";
+
+        icon.textContent =
+            "🟡";
+
+        title.textContent =
+            "พบค่าบางรายการที่ควรปรับปรุง";
+
+        text.textContent =
+            "ห้องเรียนยังสามารถใช้งานได้ แต่มีบางค่าที่ควรติดตามหรือปรับสภาพแวดล้อมให้เหมาะสมขึ้น";
+
+    }
+
+
+    problemList.innerHTML =
+        problems
+        .map(problem => {
+
+            return `
+            <div
+                class="problem-item
+                ${
+                    problem.type === "bad"
+                    ? "problem-bad"
+                    : "problem-warn"
+                }">
+
+                <span class="problem-icon">
+                    ${problem.icon}
+                </span>
+
+                <span>
+                    ${problem.text}
+                </span>
+
+            </div>
+            `;
+
+        })
+        .join("");
 
 }
 
+
+/* ==========================================
+   SMART RECOMMENDATIONS
+========================================== */
 
 function updateRecommendations(d){
 
-  const temp = Number(d.temp);
-  const light = Number(d.light);
-  const co2 = Number(d.co2);
-  const aqi = Number(d.air_quality);
-  const people = Number(d.people);
+    const temp =
+        Number(d.temp);
+
+    const light =
+        Number(d.light);
+
+    const co2 =
+        Number(d.co2);
+
+    const aqi =
+        Number(d.air_quality);
+
+    const people =
+        Number(d.people);
 
 
-  const coolState =
-    document.getElementById("coolState");
+    /* COOLING */
 
-  const coolText =
-    document.getElementById("coolText");
+    const coolState =
+        document.getElementById(
+            "coolState"
+        );
 
-
-  if(temp > 28){
-
-    coolState.textContent =
-      "ADJUST";
-
-    coolState.className =
-      "control-state control-action";
-
-    coolText.textContent =
-      "Temperature is elevated. Consider adjusting the cooling system.";
-
-  }
-
-  else{
-
-    coolState.textContent =
-      "NORMAL";
-
-    coolState.className =
-      "control-state control-normal";
-
-    coolText.textContent =
-      "Temperature is within the configured classroom range.";
-
-  }
+    const coolText =
+        document.getElementById(
+            "coolText"
+        );
 
 
-  const ventState =
-    document.getElementById("ventState");
+    if(temp > 30){
 
-  const ventText =
-    document.getElementById("ventText");
+        coolState.textContent =
+            "ควรปรับทันที";
+
+        coolState.className =
+            "control-state control-danger";
+
+        coolText.textContent =
+            "อุณหภูมิสูงกว่าช่วงที่กำหนด ควรปรับเครื่องปรับอากาศหรือตรวจสอบการระบายความร้อน";
+
+    }
+
+    else if(temp > 28){
+
+        coolState.textContent =
+            "ควรปรับ";
+
+        coolState.className =
+            "control-state control-action";
+
+        coolText.textContent =
+            "อุณหภูมิเริ่มสูง ควรลดอุณหภูมิหรือเพิ่มการหมุนเวียนอากาศภายในห้อง";
+
+    }
+
+    else if(temp < 24){
+
+        coolState.textContent =
+            "ควรตรวจสอบ";
+
+        coolState.className =
+            "control-state control-action";
+
+        coolText.textContent =
+            "อุณหภูมิค่อนข้างต่ำ อาจปรับเครื่องปรับอากาศให้อุ่นขึ้นเล็กน้อย";
+
+    }
+
+    else{
+
+        coolState.textContent =
+            "ปกติ";
+
+        coolState.className =
+            "control-state control-normal";
+
+        coolText.textContent =
+            "อุณหภูมิอยู่ในช่วงที่ระบบกำหนด ยังไม่จำเป็นต้องปรับระบบทำความเย็น";
+
+    }
 
 
-  if(co2 >= 1000 || aqi > 50){
+    /* VENTILATION */
 
-    ventState.textContent =
-      "VENTILATE";
+    const ventState =
+        document.getElementById(
+            "ventState"
+        );
 
-    ventState.className =
-      "control-state control-action";
-
-    ventText.textContent =
-      "Air conditions indicate that additional classroom ventilation is recommended.";
-
-  }
-
-  else if(people > 30){
-
-    ventState.textContent =
-      "MONITOR";
-
-    ventState.className =
-      "control-state control-action";
-
-    ventText.textContent =
-      "Occupancy is high. Monitor CO₂ and air quality as the class continues.";
-
-  }
-
-  else{
-
-    ventState.textContent =
-      "NORMAL";
-
-    ventState.className =
-      "control-state control-normal";
-
-    ventText.textContent =
-      "CO₂ and air quality are currently within the configured range.";
-
-  }
+    const ventText =
+        document.getElementById(
+            "ventText"
+        );
 
 
-  const lightState =
-    document.getElementById("lightControlState");
+    if(
+        co2 >= 1500 ||
+        aqi > 100
+    ){
 
-  const lightText =
-    document.getElementById("lightControlText");
+        ventState.textContent =
+            "ควรระบายอากาศ";
+
+        ventState.className =
+            "control-state control-danger";
+
+        ventText.textContent =
+            "ค่า CO₂ หรือคุณภาพอากาศอยู่ในระดับที่ควรแก้ไข แนะนำให้เพิ่มการถ่ายเทอากาศภายในห้อง";
+
+    }
+
+    else if(
+        co2 >= 1000 ||
+        aqi > 50
+    ){
+
+        ventState.textContent =
+            "แนะนำให้ระบายอากาศ";
+
+        ventState.className =
+            "control-state control-action";
+
+        ventText.textContent =
+            "CO₂ หรือคุณภาพอากาศเริ่มสูง แนะนำให้เปิดประตู หน้าต่าง หรือเพิ่มการระบายอากาศ";
+
+    }
+
+    else if(people > 30){
+
+        ventState.textContent =
+            "ควรเฝ้าระวัง";
+
+        ventState.className =
+            "control-state control-action";
+
+        ventText.textContent =
+            "มีผู้ใช้งานในห้องค่อนข้างมาก ควรติดตามค่า CO₂ และคุณภาพอากาศอย่างต่อเนื่อง";
+
+    }
+
+    else{
+
+        ventState.textContent =
+            "ปกติ";
+
+        ventState.className =
+            "control-state control-normal";
+
+        ventText.textContent =
+            "CO₂ และคุณภาพอากาศอยู่ในช่วงที่ระบบกำหนด การระบายอากาศยังอยู่ในสภาวะปกติ";
+
+    }
 
 
-  if(light < 300){
+    /* LIGHTING */
 
-    lightState.textContent =
-      "TURN ON";
+    const lightState =
+        document.getElementById(
+            "lightControlState"
+        );
 
-    lightState.className =
-      "control-state control-action";
+    const lightText =
+        document.getElementById(
+            "lightControlText"
+        );
 
-    lightText.textContent =
-      "Lighting is low. Additional classroom lighting is recommended.";
 
-  }
+    if(light < 300){
 
-  else if(light > 700){
+        lightState.textContent =
+            "ควรเปิดไฟเพิ่ม";
 
-    lightState.textContent =
-      "REDUCE";
+        lightState.className =
+            "control-state control-action";
 
-    lightState.className =
-      "control-state control-action";
+        lightText.textContent =
+            "แสงสว่างภายในห้องต่ำ แนะนำให้เปิดไฟหรือเพิ่มแสงบริเวณที่ใช้งาน";
 
-    lightText.textContent =
-      "Lighting is relatively high. Consider reducing unnecessary lighting.";
+    }
 
-  }
+    else if(light > 700){
 
-  else{
+        lightState.textContent =
+            "ควรลดแสง";
 
-    lightState.textContent =
-      "NORMAL";
+        lightState.className =
+            "control-state control-action";
 
-    lightState.className =
-      "control-state control-normal";
+        lightText.textContent =
+            "ห้องมีความสว่างค่อนข้างสูง สามารถลดไฟที่ไม่จำเป็นเพื่อประหยัดพลังงาน";
 
-    lightText.textContent =
-      "Lighting is within the configured classroom range.";
+    }
 
-  }
+    else{
+
+        lightState.textContent =
+            "ปกติ";
+
+        lightState.className =
+            "control-state control-normal";
+
+        lightText.textContent =
+            "ระดับความสว่างอยู่ในช่วงที่ระบบกำหนด ยังไม่จำเป็นต้องปรับแสงเพิ่มเติม";
+
+    }
 
 }
 
+
+/* ==========================================
+   UPDATE LATEST DATA
+========================================== */
 
 function updateLatest(d){
 
-  if(!d){
-    return;
-  }
+    if(!d){
 
+        return;
 
-  const temp =
-    Number(d.temp);
+    }
 
-  const humi =
-    Number(d.humi);
 
-  const light =
-    Number(d.light);
+    const temp =
+        Number(d.temp);
 
-  const co2 =
-    Number(d.co2);
+    const humi =
+        Number(d.humi);
 
-  const aqi =
-    Number(d.air_quality);
+    const light =
+        Number(d.light);
 
-  const people =
-    Number(d.people);
+    const co2 =
+        Number(d.co2);
 
+    const aqi =
+        Number(d.air_quality);
 
-  document.getElementById("temp").textContent =
-    temp.toFixed(1);
+    const people =
+        Number(d.people);
 
-  document.getElementById("humi").textContent =
-    humi.toFixed(1);
 
-  document.getElementById("light").textContent =
-    Math.round(light);
+    document
+        .getElementById("temp")
+        .textContent =
+        temp.toFixed(1);
 
-  document.getElementById("co2").textContent =
-    Math.round(co2);
 
-  document.getElementById("aqi").textContent =
-    Math.round(aqi);
+    document
+        .getElementById("humi")
+        .textContent =
+        humi.toFixed(1);
 
-  document.getElementById("people").textContent =
-    Math.round(people);
 
+    document
+        .getElementById("light")
+        .textContent =
+        Math.round(light);
 
-  if(temp >= 24 && temp <= 28){
 
-    setState(
-      "tempState",
-      "Comfortable",
-      "good"
-    );
+    document
+        .getElementById("co2")
+        .textContent =
+        Math.round(co2);
 
-  }
 
-  else if(temp <= 30){
+    document
+        .getElementById("aqi")
+        .textContent =
+        Math.round(aqi);
 
-    setState(
-      "tempState",
-      "Slightly warm",
-      "warn"
-    );
 
-  }
+    document
+        .getElementById("people")
+        .textContent =
+        Math.round(people);
 
-  else{
 
-    setState(
-      "tempState",
-      "High temperature",
-      "bad"
-    );
+    /* TEMP */
 
-  }
+    if(
+        temp >= 24 &&
+        temp <= 28
+    ){
 
+        setState(
+            "tempState",
+            "กำลังสบาย",
+            "good"
+        );
 
-  if(humi >= 45 && humi <= 65){
+    }
 
-    setState(
-      "humiState",
-      "Comfortable",
-      "good"
-    );
+    else if(
+        temp >= 22 &&
+        temp <= 30
+    ){
 
-  }
+        setState(
+            "tempState",
+            temp > 28
+            ? "ค่อนข้างร้อน"
+            : "ค่อนข้างเย็น",
+            "warn"
+        );
 
-  else{
+    }
 
-    setState(
-      "humiState",
-      "Check humidity",
-      "warn"
-    );
+    else{
 
-  }
+        setState(
+            "tempState",
+            "ควรตรวจสอบอุณหภูมิ",
+            "bad"
+        );
 
+    }
 
-  if(light >= 300 && light <= 700){
 
-    setState(
-      "lightState",
-      "Good lighting",
-      "good"
-    );
+    /* HUMIDITY */
 
-  }
+    if(
+        humi >= 45 &&
+        humi <= 65
+    ){
 
-  else if(light < 300){
+        setState(
+            "humiState",
+            "เหมาะสม",
+            "good"
+        );
 
-    setState(
-      "lightState",
-      "Too dark",
-      "warn"
-    );
+    }
 
-  }
+    else{
 
-  else{
+        setState(
+            "humiState",
+            humi > 65
+            ? "ความชื้นค่อนข้างสูง"
+            : "ความชื้นค่อนข้างต่ำ",
+            "warn"
+        );
 
-    setState(
-      "lightState",
-      "Very bright",
-      "warn"
-    );
+    }
 
-  }
 
+    /* LIGHT */
 
-  if(co2 < 1000){
+    if(
+        light >= 300 &&
+        light <= 700
+    ){
 
-    setState(
-      "co2State",
-      "Good",
-      "good"
-    );
+        setState(
+            "lightState",
+            "แสงเหมาะสม",
+            "good"
+        );
 
-  }
+    }
 
-  else if(co2 < 1500){
+    else if(light < 300){
 
-    setState(
-      "co2State",
-      "Ventilation advised",
-      "warn"
-    );
+        setState(
+            "lightState",
+            "แสงน้อย",
+            "warn"
+        );
 
-  }
+    }
 
-  else{
+    else{
 
-    setState(
-      "co2State",
-      "High CO₂",
-      "bad"
-    );
+        setState(
+            "lightState",
+            "แสงค่อนข้างมาก",
+            "warn"
+        );
 
-  }
+    }
 
 
-  if(aqi <= 50){
+    /* CO2 */
 
-    setState(
-      "aqiState",
-      "Good",
-      "good"
-    );
+    if(co2 < 1000){
 
-  }
+        setState(
+            "co2State",
+            "ปกติ",
+            "good"
+        );
 
-  else if(aqi <= 100){
+    }
 
-    setState(
-      "aqiState",
-      "Moderate",
-      "warn"
-    );
+    else if(co2 < 1500){
 
-  }
+        setState(
+            "co2State",
+            "ควรเพิ่มการระบายอากาศ",
+            "warn"
+        );
 
-  else{
+    }
 
-    setState(
-      "aqiState",
-      "Poor",
-      "bad"
-    );
+    else{
 
-  }
+        setState(
+            "co2State",
+            "CO₂ สูง",
+            "bad"
+        );
 
+    }
 
-  if(people <= 30){
 
-    setState(
-      "peopleState",
-      "Normal occupancy",
-      "good"
-    );
+    /* AQI */
 
-  }
+    if(aqi <= 50){
 
-  else{
+        setState(
+            "aqiState",
+            "อากาศดี",
+            "good"
+        );
 
-    setState(
-      "peopleState",
-      "Crowded",
-      "warn"
-    );
+    }
 
-  }
+    else if(aqi <= 100){
 
+        setState(
+            "aqiState",
+            "ปานกลาง",
+            "warn"
+        );
 
-  newestTimestamp =
-    Number(d.timestamp || 0);
+    }
 
+    else{
 
-  if(newestTimestamp){
+        setState(
+            "aqiState",
+            "ควรตรวจสอบคุณภาพอากาศ",
+            "bad"
+        );
 
-    const date =
-      new Date(
-        newestTimestamp * 1000
-      );
+    }
 
-    document.getElementById("lastUpdate").textContent =
-      date.toLocaleString("th-TH");
 
-  }
+    /* PEOPLE */
 
+    if(people <= 30){
 
-  updateScore(d);
-  updateAnalysis(d);
-  updateRecommendations(d);
-  checkDeviceStatus();
+        setState(
+            "peopleState",
+            "จำนวนคนปกติ",
+            "good"
+        );
+
+    }
+
+    else{
+
+        setState(
+            "peopleState",
+            "คนค่อนข้างหนาแน่น",
+            "warn"
+        );
+
+    }
+
+
+    /* TIMESTAMP */
+
+    newestTimestamp =
+        Number(
+            d.timestamp || 0
+        );
+
+
+    if(newestTimestamp){
+
+        const date =
+            new Date(
+                newestTimestamp *
+                1000
+            );
+
+
+        document
+            .getElementById(
+                "lastUpdate"
+            )
+            .textContent =
+
+            date.toLocaleString(
+                "th-TH"
+            );
+
+    }
+
+
+    updateScore(d);
+
+    updateAnalysis(d);
+
+    updateRecommendations(d);
+
+    checkDeviceStatus();
 
 }
 
+
+/* ==========================================
+   CHART
+========================================== */
 
 const chart =
 new Chart(
-  document.getElementById("historyChart"),
-  {
 
-    type:"line",
+    document
+        .getElementById(
+            "historyChart"
+        ),
 
-    data:{
-      labels:[],
+    {
 
-      datasets:[
-        {
-          label:"Temperature",
-          data:[],
-          tension:.3,
-          fill:true,
-          pointRadius:3
+        type:"line",
+
+        data:{
+
+            labels:[],
+
+            datasets:[
+                {
+
+                    label:"อุณหภูมิ",
+
+                    data:[],
+
+                    tension:.3,
+
+                    fill:true,
+
+                    pointRadius:3
+
+                }
+            ]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            interaction:{
+
+                mode:"index",
+
+                intersect:false
+
+            },
+
+            plugins:{
+
+                legend:{
+
+                    display:true,
+
+                    position:"bottom"
+
+                }
+
+            },
+
+            scales:{
+
+                x:{
+
+                    ticks:{
+
+                        maxTicksLimit:10
+
+                    }
+
+                }
+
+            }
+
         }
-      ]
-    },
-
-    options:{
-
-      responsive:true,
-      maintainAspectRatio:false,
-
-      interaction:{
-        mode:"index",
-        intersect:false
-      },
-
-      plugins:{
-        legend:{
-          display:true,
-          position:"bottom"
-        }
-      },
-
-      scales:{
-        x:{
-          ticks:{
-            maxTicksLimit:10
-          }
-        }
-      }
 
     }
 
-  }
 );
 
+
+/* ==========================================
+   UPDATE CHART
+========================================== */
 
 function updateChart(){
 
-  if(!historyData.length){
-    return;
-  }
+    if(!historyData.length){
 
-
-  const config =
-    SENSOR_CONFIG[selectedSensor];
-
-
-  const data =
-    historyData.slice(-30);
-
-
-  chart.data.labels =
-    data.map(item=>{
-
-      const date =
-        new Date(
-          Number(item.timestamp)*1000
-        );
-
-      return date.toLocaleTimeString(
-        "th-TH",
-        {
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
-        }
-      );
-
-    });
-
-
-  chart.data.datasets[0].label =
-    config.label +
-    " (" +
-    config.unit +
-    ")";
-
-
-  chart.data.datasets[0].data =
-    data.map(
-      item =>
-      Number(item[selectedSensor])
-    );
-
-
-  chart.update();
-
-}
-
-
-function selectChart(sensor,button){
-
-  selectedSensor =
-    sensor;
-
-
-  document
-    .querySelectorAll(".chart-tab")
-    .forEach(
-      btn =>
-      btn.classList.remove("active")
-    );
-
-
-  button.classList.add("active");
-
-  updateChart();
-
-}
-
-
-function updateRecentActivity(){
-
-  const list =
-    document.getElementById("activityList");
-
-
-  if(!historyData.length){
-
-    list.textContent =
-      "No history data available.";
-
-    return;
-
-  }
-
-
-  const recent =
-    historyData
-      .slice(-5)
-      .reverse();
-
-
-  list.innerHTML =
-    recent.map(item=>{
-
-      const date =
-        new Date(
-          Number(item.timestamp)*1000
-        );
-
-
-      const time =
-        date.toLocaleTimeString(
-          "th-TH",
-          {
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit"
-          }
-        );
-
-
-      const co2 =
-        Math.round(
-          Number(item.co2)
-        );
-
-
-      const people =
-        Math.round(
-          Number(item.people)
-        );
-
-
-      const temp =
-        Number(item.temp)
-          .toFixed(1);
-
-
-      let status =
-        "NORMAL";
-
-
-      if(
-        co2 >= 1000 ||
-        Number(item.air_quality) > 50 ||
-        Number(item.temp) > 28
-      ){
-
-        status =
-          "CHECK";
-
-      }
-
-
-      return `
-        <div class="activity">
-
-          <div class="activity-time">
-            ${time}
-          </div>
-
-          <div>
-            ${temp} °C •
-            ${co2} ppm CO₂ •
-            ${people} people
-          </div>
-
-          <div class="activity-status">
-            ${status}
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
-
-}
-
-
-async function loadLatest(){
-
-  try{
-
-    const response =
-      await fetch(
-        LATEST +
-        "?t=" +
-        Date.now()
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
+        return;
 
     }
+
+
+    const config =
+        SENSOR_CONFIG[
+            selectedSensor
+        ];
 
 
     const data =
-      await response.json();
+        historyData.slice(-30);
 
 
-    setFirebaseStatus(true);
+    chart.data.labels =
+        data.map(item=>{
 
-    updateLatest(data);
+            const date =
+                new Date(
+                    Number(
+                        item.timestamp
+                    ) * 1000
+                );
 
-  }
 
-  catch(error){
+            return date
+                .toLocaleTimeString(
+                    "th-TH",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit",
+                        second:"2-digit"
+                    }
+                );
 
-    console.error(
-      "Latest error:",
-      error
-    );
+        });
 
-    setFirebaseStatus(false);
 
-  }
+    chart
+        .data
+        .datasets[0]
+        .label =
+
+        config.label +
+        " (" +
+        config.unit +
+        ")";
+
+
+    chart
+        .data
+        .datasets[0]
+        .data =
+
+        data.map(
+            item =>
+            Number(
+                item[
+                    selectedSensor
+                ]
+            )
+        );
+
+
+    chart.update();
 
 }
 
 
-async function loadHistory(){
+/* ==========================================
+   SELECT CHART
+========================================== */
 
-  try{
+function selectChart(
+    sensor,
+    button
+){
 
-    const response =
-      await fetch(
-        HISTORY +
-        "?t=" +
-        Date.now()
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
+    selectedSensor =
+        sensor;
 
 
-    const raw =
-      await response.json();
+    document
+        .querySelectorAll(
+            ".chart-tab"
+        )
+        .forEach(
+            btn =>
+            btn.classList.remove(
+                "active"
+            )
+        );
 
 
-    if(!raw){
-
-      return;
-
-    }
-
-
-    historyData =
-      Object.values(raw)
-      .filter(
-        item =>
-        item &&
-        item.timestamp
-      )
-      .sort(
-        (a,b) =>
-        Number(a.timestamp) -
-        Number(b.timestamp)
-      );
-
-
-    document.getElementById("recordCount").textContent =
-      historyData.length +
-      " records";
+    button.classList.add(
+        "active"
+    );
 
 
     updateChart();
-    updateRecentActivity();
-
-  }
-
-  catch(error){
-
-    console.error(
-      "History error:",
-      error
-    );
-
-  }
 
 }
 
+
+/* ==========================================
+   RECENT ACTIVITY
+========================================== */
+
+function updateRecentActivity(){
+
+    const list =
+        document
+        .getElementById(
+            "activityList"
+        );
+
+
+    if(!historyData.length){
+
+        list.textContent =
+            "ยังไม่มีข้อมูลย้อนหลัง";
+
+        return;
+
+    }
+
+
+    const recent =
+        historyData
+        .slice(-5)
+        .reverse();
+
+
+    list.innerHTML =
+        recent
+        .map(item=>{
+
+
+            const date =
+                new Date(
+                    Number(
+                        item.timestamp
+                    ) * 1000
+                );
+
+
+            const time =
+                date
+                .toLocaleTimeString(
+                    "th-TH",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit",
+                        second:"2-digit"
+                    }
+                );
+
+
+            const temp =
+                Number(
+                    item.temp
+                ).toFixed(1);
+
+
+            const co2 =
+                Math.round(
+                    Number(
+                        item.co2
+                    )
+                );
+
+
+            const people =
+                Math.round(
+                    Number(
+                        item.people
+                    )
+                );
+
+
+            const aqi =
+                Math.round(
+                    Number(
+                        item.air_quality
+                    )
+                );
+
+
+            let status =
+                "ปกติ";
+
+            let statusClass =
+                "activity-normal";
+
+
+            if(
+                co2 >= 1000 ||
+                aqi > 50 ||
+                Number(item.temp) > 28 ||
+                people > 30
+            ){
+
+                status =
+                    "ควรตรวจสอบ";
+
+                statusClass =
+                    "activity-warning";
+
+            }
+
+
+            return `
+
+            <div class="activity">
+
+                <div class="activity-time">
+
+                    ${time}
+
+                </div>
+
+
+                <div>
+
+                    🌡️ ${temp} °C
+                    •
+                    ☁️ ${co2} ppm
+                    •
+                    👥 ${people} คน
+
+                </div>
+
+
+                <div
+                    class="
+                    activity-status
+                    ${statusClass}
+                    ">
+
+                    ${status}
+
+                </div>
+
+            </div>
+
+            `;
+
+        })
+        .join("");
+
+}
+
+
+/* ==========================================
+   LOAD LATEST
+========================================== */
+
+async function loadLatest(){
+
+    try{
+
+        const response =
+            await fetch(
+
+                LATEST +
+                "?t=" +
+                Date.now()
+
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        setFirebaseStatus(true);
+
+        updateLatest(data);
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Latest error:",
+            error
+        );
+
+
+        setFirebaseStatus(false);
+
+        setDeviceStatus(false);
+
+    }
+
+}
+
+
+/* ==========================================
+   LOAD HISTORY
+========================================== */
+
+async function loadHistory(){
+
+    try{
+
+        const response =
+            await fetch(
+
+                HISTORY +
+                "?t=" +
+                Date.now()
+
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const raw =
+            await response.json();
+
+
+        if(!raw){
+
+            document
+                .getElementById(
+                    "recordCount"
+                )
+                .textContent =
+                "0 รายการ";
+
+            return;
+
+        }
+
+
+        historyData =
+            Object
+            .values(raw)
+
+            .filter(
+                item =>
+                item &&
+                item.timestamp
+            )
+
+            .sort(
+                (a,b) =>
+                Number(a.timestamp) -
+                Number(b.timestamp)
+            );
+
+
+        document
+            .getElementById(
+                "recordCount"
+            )
+            .textContent =
+
+            historyData.length +
+            " รายการ";
+
+
+        updateChart();
+
+        updateRecentActivity();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "History error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   REFRESH
+========================================== */
 
 async function refresh(){
 
-  await Promise.all([
-    loadLatest(),
-    loadHistory()
-  ]);
+    await Promise.all([
+
+        loadLatest(),
+
+        loadHistory()
+
+    ]);
 
 }
 
 
+/* โหลดครั้งแรก */
+
 refresh();
 
-setInterval(
-  refresh,
-  5000
-);
+
+/*
+Dashboard ดึงข้อมูล Firebase
+ใหม่ทุก 5 วินาที
+*/
 
 setInterval(
-  checkDeviceStatus,
-  1000
+    refresh,
+    5000
+);
+
+
+/*
+ตรวจสถานะ ESP32 ทุก 1 วินาที
+จาก timestamp ล่าสุด
+*/
+
+setInterval(
+    checkDeviceStatus,
+    1000
 );
 
 </script>
