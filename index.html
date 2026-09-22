@@ -1463,27 +1463,29 @@ function setDeviceStatus(online){
 
 function checkDeviceStatus(){
 
+    // ตอนเปิดหน้าเว็บครั้งแรก Firebase ยังโหลดข้อมูลไม่เสร็จ
+    // จึงยังไม่ควรตัดสินว่า ESP32 Offline
     if(!newestTimestamp){
 
-        setDeviceStatus(false);
+        document.getElementById("espDot").className = "dot";
+        document.getElementById("espText").textContent =
+            "ESP32 กำลังตรวจสอบ...";
+
+        document.getElementById("deviceMiniDot").className = "dot";
+        document.getElementById("deviceMini").textContent =
+            "กำลังตรวจสอบ...";
+
+        document.getElementById("streamDot").className = "dot";
+        document.getElementById("streamText").textContent =
+            "กำลังโหลดข้อมูล...";
 
         return;
-
     }
 
-    const now =
-        Math.floor(
-            Date.now()/1000
-        );
+    const now = Math.floor(Date.now() / 1000);
+    const age = now - newestTimestamp;
 
-    const age =
-        now -
-        newestTimestamp;
-
-    setDeviceStatus(
-        age <= OFFLINE_SECONDS
-    );
-
+    setDeviceStatus(age <= OFFLINE_SECONDS);
 }
 
 /* ==================================================
