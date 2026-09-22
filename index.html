@@ -8,155 +8,528 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#f3f7fc;
+  --card:#ffffff;
+  --text:#162033;
+  --muted:#64748b;
+  --line:#e5eaf1;
+  --blue:#2563eb;
+  --cyan:#06b6d4;
+  --green:#16a34a;
+  --yellow:#d97706;
+  --red:#dc2626;
+}
+
 body{
   margin:0;
   font-family:Arial,"Noto Sans Thai",sans-serif;
-  background:#f4f7fb;
-  color:#172033;
+  background:var(--bg);
+  color:var(--text);
 }
+
 header{
-  background:linear-gradient(120deg,#2563eb,#06b6d4);
+  background:
+    radial-gradient(circle at top right,rgba(255,255,255,.20),transparent 30%),
+    linear-gradient(120deg,#1d4ed8,#0284c7,#06b6d4);
   color:white;
-  padding:28px 5%;
+  padding:30px 5%;
 }
+
 .header-inner{
   max-width:1250px;
   margin:auto;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:20px;
+  gap:25px;
   flex-wrap:wrap;
 }
-h1{margin:0 0 6px;font-size:30px}
-.subtitle{opacity:.9}
-.badges{display:flex;gap:10px;flex-wrap:wrap}
-.badge{
-  padding:10px 15px;
+
+.brand h1{
+  margin:0;
+  font-size:31px;
+}
+
+.brand p{
+  margin:7px 0 0;
+  opacity:.88;
+}
+
+.live-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.live-badge{
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(5px);
   border-radius:30px;
-  background:rgba(255,255,255,.16);
+  padding:10px 14px;
   display:flex;
   align-items:center;
   gap:8px;
+  font-size:13px;
 }
+
 .dot{
-  width:10px;height:10px;border-radius:50%;
+  width:10px;
+  height:10px;
+  border-radius:50%;
   background:#f59e0b;
 }
-.green{background:#22c55e;box-shadow:0 0 8px #22c55e}
-.red{background:#ef4444}
+
+.dot.green{
+  background:#22c55e;
+  box-shadow:0 0 9px #22c55e;
+}
+
+.dot.red{
+  background:#ef4444;
+}
+
 main{
   max-width:1250px;
   margin:auto;
-  padding:28px 20px 50px;
+  padding:25px 20px 50px;
 }
-.section-head{
+
+.top-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:18px;
+  margin-bottom:20px;
+}
+
+.system-card,
+.score-card,
+.sensor-card,
+.panel{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 7px 25px rgba(15,23,42,.055);
+}
+
+.system-card{
+  padding:20px;
+}
+
+.system-card h2,
+.score-card h2{
+  margin:0 0 15px;
+  font-size:17px;
+}
+
+.health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.health-item{
+  background:#f8fafc;
+  border-radius:12px;
+  padding:13px;
+}
+
+.health-label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.health-value{
+  margin-top:6px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.score-card{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.score-number{
+  font-size:47px;
+  font-weight:800;
+  line-height:1;
+}
+
+.score-number small{
+  font-size:17px;
+  color:var(--muted);
+}
+
+.score-label{
+  margin-top:7px;
+  font-weight:700;
+  color:var(--green);
+}
+
+.score-ring{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:31px;
+  background:#ecfdf5;
+}
+
+.section-title{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
   flex-wrap:wrap;
-  margin-bottom:18px;
+  margin:23px 0 15px;
 }
-.section-head h2{margin:0}
-.last-update{font-size:14px;color:#64748b}
-.cards{
+
+.section-title h2{
+  margin:0;
+  font-size:21px;
+}
+
+.last-update{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.sensor-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:18px;
+  gap:17px;
 }
-.card{
-  background:white;
-  padding:22px;
-  border-radius:18px;
-  border:1px solid #e6eaf0;
-  box-shadow:0 6px 22px rgba(15,23,42,.06);
+
+.sensor-card{
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+  transition:.2s;
 }
-.icon{font-size:31px}
-.label{
-  color:#64748b;
-  margin-top:15px;
-  font-size:14px;
+
+.sensor-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 11px 28px rgba(15,23,42,.09);
 }
-.value{
-  font-size:36px;
-  font-weight:700;
-  margin-top:5px;
+
+.sensor-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:4px;
+  height:100%;
+  background:#38bdf8;
 }
-.unit{
-  font-size:16px;
+
+.sensor-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.sensor-icon{
+  font-size:30px;
+}
+
+.sensor-name{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.sensor-value{
+  font-size:35px;
+  font-weight:800;
+  margin-top:11px;
+}
+
+.sensor-unit{
+  font-size:15px;
   font-weight:400;
-  color:#64748b;
+  color:var(--muted);
 }
+
 .state{
   display:inline-block;
-  margin-top:12px;
+  margin-top:11px;
   padding:6px 11px;
   border-radius:20px;
   font-size:12px;
   background:#e2e8f0;
 }
-.good{background:#dcfce7;color:#15803d}
-.warn{background:#fef3c7;color:#a16207}
-.bad{background:#fee2e2;color:#b91c1c}
+
+.good{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.warn{
+  background:#fef3c7;
+  color:#a16207;
+}
+
+.bad{
+  background:#fee2e2;
+  color:#b91c1c;
+}
 
 .panel{
-  background:white;
-  margin-top:22px;
-  padding:22px;
-  border-radius:18px;
-  border:1px solid #e6eaf0;
-  box-shadow:0 6px 22px rgba(15,23,42,.06);
+  margin-top:20px;
+  padding:21px;
 }
-.panel h2{margin-top:0}
-.overall{
+
+.panel h2{
+  margin:0 0 16px;
+  font-size:19px;
+}
+
+.analysis{
   padding:18px;
   border-radius:14px;
-  background:#f0fdf4;
   display:flex;
-  align-items:center;
   gap:15px;
+  align-items:flex-start;
+  background:#f0fdf4;
 }
-.overall-icon{font-size:34px}
-.overall-title{font-weight:700;font-size:18px}
-.overall-detail{
-  color:#64748b;
+
+.analysis-icon{
+  font-size:32px;
+}
+
+.analysis-title{
+  font-size:17px;
+  font-weight:800;
+}
+
+.analysis-text{
+  color:var(--muted);
   margin-top:5px;
-  line-height:1.5;
+  line-height:1.6;
 }
-.info-grid{
+
+.recommend-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:18px;
+  gap:13px;
 }
-.info{
+
+.recommend{
   background:#f8fafc;
-  padding:14px;
-  border-radius:12px;
+  border:1px solid #edf1f5;
+  border-radius:14px;
+  padding:16px;
 }
-.info-title{font-size:12px;color:#64748b}
-.info-value{font-weight:700;margin-top:5px}
+
+.recommend-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.recommend-name{
+  font-weight:700;
+}
+
+.control-state{
+  font-size:11px;
+  font-weight:700;
+  border-radius:20px;
+  padding:5px 9px;
+}
+
+.control-normal{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.control-action{
+  background:#fef3c7;
+  color:#a16207;
+}
+
+.recommend-text{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:10px;
+  line-height:1.5;
+}
+
+.chart-tabs{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:17px;
+}
+
+.chart-tab{
+  border:1px solid #dbe3ec;
+  background:white;
+  color:#475569;
+  border-radius:9px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+}
+
+.chart-tab:hover{
+  background:#f1f5f9;
+}
+
+.chart-tab.active{
+  background:#2563eb;
+  color:white;
+  border-color:#2563eb;
+}
 
 .chart-wrap{
-  height:360px;
   position:relative;
+  height:350px;
 }
+
+.bottom-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:20px;
+}
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.activity{
+  background:#f8fafc;
+  border-radius:11px;
+  padding:11px 13px;
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  gap:10px;
+  align-items:center;
+  font-size:13px;
+}
+
+.activity-time{
+  color:var(--muted);
+}
+
+.activity-status{
+  color:var(--green);
+  font-weight:700;
+  font-size:11px;
+}
+
+.info-list{
+  display:grid;
+  gap:9px;
+}
+
+.info-row{
+  background:#f8fafc;
+  padding:11px 13px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  font-size:13px;
+}
+
+.info-row span:first-child{
+  color:var(--muted);
+}
+
+.info-row span:last-child{
+  font-weight:700;
+  text-align:right;
+}
+
+.architecture{
+  margin-top:20px;
+  padding:20px;
+  border-radius:16px;
+  background:linear-gradient(120deg,#eff6ff,#ecfeff);
+  border:1px solid #dbeafe;
+}
+
+.architecture h3{
+  margin:0 0 16px;
+}
+
+.flow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.flow-box{
+  background:white;
+  border:1px solid #dbeafe;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.arrow{
+  color:#3b82f6;
+  font-weight:bold;
+}
+
 footer{
   text-align:center;
   color:#94a3b8;
-  margin-top:28px;
-  font-size:13px;
-  line-height:1.7;
+  margin-top:30px;
+  font-size:12px;
+  line-height:1.8;
 }
-@media(max-width:850px){
-  .cards{grid-template-columns:repeat(2,1fr)}
-  .info-grid{grid-template-columns:1fr}
+
+@media(max-width:900px){
+  .top-grid,
+  .bottom-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sensor-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .recommend-grid{
+    grid-template-columns:1fr;
+  }
 }
-@media(max-width:550px){
-  .cards{grid-template-columns:1fr}
-  h1{font-size:24px}
+
+@media(max-width:600px){
+  .sensor-grid,
+  .health-grid{
+    grid-template-columns:1fr;
+  }
+
+  .brand h1{
+    font-size:24px;
+  }
+
+  .score-card{
+    align-items:flex-start;
+  }
+
+  .activity{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -164,381 +537,1514 @@ footer{
 <body>
 
 <header>
-<div class="header-inner">
-  <div>
-    <h1>🏫 Smart Classroom 103</h1>
-    <div class="subtitle">ESP32 IoT Realtime Monitoring System</div>
-  </div>
+  <div class="header-inner">
 
-  <div class="badges">
-    <div class="badge">
-      <span id="firebaseDot" class="dot"></span>
-      <span id="firebaseText">Firebase...</span>
+    <div class="brand">
+      <h1>🏫 Smart Classroom 103</h1>
+      <p>Realtime IoT Environmental Monitoring & Smart Recommendation System</p>
     </div>
 
-    <div class="badge">
-      <span id="espDot" class="dot"></span>
-      <span id="espText">ESP32...</span>
+    <div class="live-badges">
+
+      <div class="live-badge">
+        <span id="firebaseDot" class="dot"></span>
+        <span id="firebaseText">Firebase...</span>
+      </div>
+
+      <div class="live-badge">
+        <span id="espDot" class="dot"></span>
+        <span id="espText">ESP32...</span>
+      </div>
+
+      <div class="live-badge">
+        <span id="streamDot" class="dot"></span>
+        <span id="streamText">Data Stream...</span>
+      </div>
+
     </div>
+
   </div>
-</div>
 </header>
+
 
 <main>
 
-<div class="section-head">
-  <h2>Realtime Classroom Data</h2>
-  <div class="last-update">
-    Last sensor update: <b id="lastUpdate">Waiting...</b>
-  </div>
-</div>
+<div class="top-grid">
 
-<div class="cards">
+  <div class="system-card">
+    <h2>⚡ System Health</h2>
 
-<div class="card">
-  <div class="icon">🌡️</div>
-  <div class="label">Temperature</div>
-  <div class="value"><span id="temp">--</span> <span class="unit">°C</span></div>
-  <span id="tempState" class="state">Waiting</span>
-</div>
+    <div class="health-grid">
 
-<div class="card">
-  <div class="icon">💧</div>
-  <div class="label">Humidity</div>
-  <div class="value"><span id="humi">--</span> <span class="unit">%</span></div>
-  <span id="humiState" class="state">Waiting</span>
-</div>
+      <div class="health-item">
+        <div class="health-label">DATABASE</div>
+        <div class="health-value">
+          <span id="dbMiniDot" class="dot"></span>
+          <span id="dbMini">Connecting</span>
+        </div>
+      </div>
 
-<div class="card">
-  <div class="icon">💡</div>
-  <div class="label">Light Level</div>
-  <div class="value"><span id="light">--</span> <span class="unit">lux</span></div>
-  <span id="lightState" class="state">Waiting</span>
-</div>
+      <div class="health-item">
+        <div class="health-label">ESP32 DEVICE</div>
+        <div class="health-value">
+          <span id="deviceMiniDot" class="dot"></span>
+          <span id="deviceMini">Checking</span>
+        </div>
+      </div>
 
-<div class="card">
-  <div class="icon">☁️</div>
-  <div class="label">CO₂</div>
-  <div class="value"><span id="co2">--</span> <span class="unit">ppm</span></div>
-  <span id="co2State" class="state">Waiting</span>
-</div>
+      <div class="health-item">
+        <div class="health-label">HISTORY RECORDS</div>
+        <div class="health-value">
+          📊 <span id="recordCount">--</span>
+        </div>
+      </div>
 
-<div class="card">
-  <div class="icon">🍃</div>
-  <div class="label">Air Quality</div>
-  <div class="value"><span id="aqi">--</span> <span class="unit">AQI</span></div>
-  <span id="aqiState" class="state">Waiting</span>
-</div>
-
-<div class="card">
-  <div class="icon">👥</div>
-  <div class="label">People</div>
-  <div class="value"><span id="people">--</span> <span class="unit">people</span></div>
-  <span id="peopleState" class="state">Waiting</span>
-</div>
-
-</div>
-
-<div class="panel">
-<h2>Classroom Status</h2>
-
-<div class="overall" id="overallBox">
-  <div class="overall-icon" id="overallIcon">🔄</div>
-  <div>
-    <div class="overall-title" id="overallTitle">Waiting for sensor data</div>
-    <div class="overall-detail" id="overallDetail">
-      Connecting to Smart Classroom monitoring system...
     </div>
   </div>
-</div>
 
-<div class="info-grid">
-  <div class="info">
-    <div class="info-title">DEVICE</div>
-    <div class="info-value">ESP32 - Classroom 103</div>
+
+  <div class="score-card">
+
+    <div>
+      <h2>Classroom Score</h2>
+
+      <div class="score-number">
+        <span id="score">--</span><small>/100</small>
+      </div>
+
+      <div class="score-label" id="scoreLabel">
+        Waiting for data
+      </div>
+    </div>
+
+    <div class="score-ring" id="scoreRing">
+      ⏳
+    </div>
+
   </div>
 
-  <div class="info">
-    <div class="info-title">DATABASE</div>
-    <div class="info-value">Firebase Realtime Database</div>
+</div>
+
+
+<div class="section-title">
+  <h2>Realtime Classroom Data</h2>
+
+  <div class="last-update">
+    Last sensor update:
+    <b id="lastUpdate">Waiting...</b>
+  </div>
+</div>
+
+
+<div class="sensor-grid">
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">🌡️</span>
+      <span class="sensor-name">TEMPERATURE</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="temp">--</span>
+      <span class="sensor-unit">°C</span>
+    </div>
+
+    <span id="tempState" class="state">Waiting</span>
   </div>
 
-  <div class="info">
-    <div class="info-title">HISTORY RECORDS</div>
-    <div class="info-value" id="recordCount">--</div>
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">💧</span>
+      <span class="sensor-name">HUMIDITY</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="humi">--</span>
+      <span class="sensor-unit">%</span>
+    </div>
+
+    <span id="humiState" class="state">Waiting</span>
   </div>
+
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">💡</span>
+      <span class="sensor-name">LIGHT LEVEL</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="light">--</span>
+      <span class="sensor-unit">lux</span>
+    </div>
+
+    <span id="lightState" class="state">Waiting</span>
+  </div>
+
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">☁️</span>
+      <span class="sensor-name">CO₂</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="co2">--</span>
+      <span class="sensor-unit">ppm</span>
+    </div>
+
+    <span id="co2State" class="state">Waiting</span>
+  </div>
+
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">🍃</span>
+      <span class="sensor-name">AIR QUALITY</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="aqi">--</span>
+      <span class="sensor-unit">AQI</span>
+    </div>
+
+    <span id="aqiState" class="state">Waiting</span>
+  </div>
+
+
+  <div class="sensor-card">
+    <div class="sensor-head">
+      <span class="sensor-icon">👥</span>
+      <span class="sensor-name">OCCUPANCY</span>
+    </div>
+
+    <div class="sensor-value">
+      <span id="people">--</span>
+      <span class="sensor-unit">people</span>
+    </div>
+
+    <span id="peopleState" class="state">Waiting</span>
+  </div>
+
 </div>
-</div>
+
 
 <div class="panel">
-  <h2>📈 Sensor History</h2>
-  <div class="chart-wrap">
-    <canvas id="chart"></canvas>
+
+  <h2>🧠 Smart Classroom Analysis</h2>
+
+  <div class="analysis" id="analysisBox">
+
+    <div class="analysis-icon" id="analysisIcon">
+      ⏳
+    </div>
+
+    <div>
+      <div class="analysis-title" id="analysisTitle">
+        Waiting for sensor data
+      </div>
+
+      <div class="analysis-text" id="analysisText">
+        The monitoring system is preparing the classroom analysis.
+      </div>
+    </div>
+
   </div>
+
 </div>
 
+
+<div class="panel">
+
+  <h2>⚙️ Smart Control Recommendations</h2>
+
+  <div class="recommend-grid">
+
+    <div class="recommend">
+      <div class="recommend-top">
+        <div class="recommend-name">❄️ Cooling</div>
+        <div id="coolState" class="control-state control-normal">
+          NORMAL
+        </div>
+      </div>
+
+      <div id="coolText" class="recommend-text">
+        Monitoring classroom temperature.
+      </div>
+    </div>
+
+
+    <div class="recommend">
+      <div class="recommend-top">
+        <div class="recommend-name">🌬️ Ventilation</div>
+        <div id="ventState" class="control-state control-normal">
+          NORMAL
+        </div>
+      </div>
+
+      <div id="ventText" class="recommend-text">
+        Monitoring CO₂ and air quality.
+      </div>
+    </div>
+
+
+    <div class="recommend">
+      <div class="recommend-top">
+        <div class="recommend-name">💡 Lighting</div>
+        <div id="lightControlState" class="control-state control-normal">
+          NORMAL
+        </div>
+      </div>
+
+      <div id="lightControlText" class="recommend-text">
+        Monitoring classroom lighting.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="panel">
+
+  <h2>📈 Sensor History</h2>
+
+  <div class="chart-tabs">
+
+    <button class="chart-tab active"
+            onclick="selectChart('temp',this)">
+      Temperature
+    </button>
+
+    <button class="chart-tab"
+            onclick="selectChart('humi',this)">
+      Humidity
+    </button>
+
+    <button class="chart-tab"
+            onclick="selectChart('co2',this)">
+      CO₂
+    </button>
+
+    <button class="chart-tab"
+            onclick="selectChart('air_quality',this)">
+      AQI
+    </button>
+
+    <button class="chart-tab"
+            onclick="selectChart('light',this)">
+      Light
+    </button>
+
+    <button class="chart-tab"
+            onclick="selectChart('people',this)">
+      People
+    </button>
+
+  </div>
+
+  <div class="chart-wrap">
+    <canvas id="historyChart"></canvas>
+  </div>
+
+</div>
+
+
+<div class="bottom-grid">
+
+  <div class="panel">
+
+    <h2>🕒 Recent Activity</h2>
+
+    <div class="activity-list" id="activityList">
+      Waiting for history data...
+    </div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <h2>ℹ️ System Information</h2>
+
+    <div class="info-list">
+
+      <div class="info-row">
+        <span>Database</span>
+        <span>iot-103</span>
+      </div>
+
+      <div class="info-row">
+        <span>Device</span>
+        <span>ESP32</span>
+      </div>
+
+      <div class="info-row">
+        <span>IoT Platform</span>
+        <span>ESPHome</span>
+      </div>
+
+      <div class="info-row">
+        <span>Realtime Storage</span>
+        <span>Firebase RTDB</span>
+      </div>
+
+      <div class="info-row">
+        <span>Data Nodes</span>
+        <span>latest / history</span>
+      </div>
+
+      <div class="info-row">
+        <span>Dashboard Hosting</span>
+        <span>GitHub Pages</span>
+      </div>
+
+      <div class="info-row">
+        <span>Update Interval</span>
+        <span>10 seconds</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="architecture">
+
+  <h3>🔗 IoT System Architecture</h3>
+
+  <div class="flow">
+
+    <div class="flow-box">ESP32</div>
+    <div class="arrow">→</div>
+
+    <div class="flow-box">ESPHome</div>
+    <div class="arrow">→</div>
+
+    <div class="flow-box">Firebase RTDB</div>
+    <div class="arrow">→</div>
+
+    <div class="flow-box">GitHub Pages</div>
+    <div class="arrow">→</div>
+
+    <div class="flow-box">Web Dashboard</div>
+
+  </div>
+
+</div>
+
+
 <footer>
-  Smart Classroom 103<br>
-  ESP32 • ESPHome • Firebase Realtime Database • GitHub Pages
+Smart Classroom 103 — IoT Realtime Monitoring System<br>
+ESP32 • ESPHome • Firebase Realtime Database • GitHub Pages
 </footer>
 
 </main>
 
+
 <script>
+
 const DB =
 "https://iot-103-default-rtdb.asia-southeast1.firebasedatabase.app";
 
-const LATEST = DB + "/lab/esp32-01/latest.json";
-const HISTORY = DB + "/lab/esp32-01/history.json";
+const LATEST =
+DB + "/lab/esp32-01/latest.json";
 
-// ถ้าไม่มีข้อมูลใหม่เกิน 30 วินาที ถือว่าบอร์ด offline
+const HISTORY =
+DB + "/lab/esp32-01/history.json";
+
 const OFFLINE_SECONDS = 30;
 
 let newestTimestamp = 0;
+let historyData = [];
+let selectedSensor = "temp";
 
-function state(id,text,type){
-  const el=document.getElementById(id);
-  el.textContent=text;
-  el.className="state "+type;
-}
 
-function setDeviceOnline(isOnline){
-  const dot=document.getElementById("espDot");
-  const text=document.getElementById("espText");
+const SENSOR_CONFIG = {
 
-  if(isOnline){
-    dot.className="dot green";
-    text.textContent="ESP32 Online • LIVE";
-  }else{
-    dot.className="dot red";
-    text.textContent="ESP32 Offline";
+  temp:{
+    label:"Temperature",
+    unit:"°C"
+  },
+
+  humi:{
+    label:"Humidity",
+    unit:"%"
+  },
+
+  co2:{
+    label:"CO₂",
+    unit:"ppm"
+  },
+
+  air_quality:{
+    label:"Air Quality",
+    unit:"AQI"
+  },
+
+  light:{
+    label:"Light Level",
+    unit:"lux"
+  },
+
+  people:{
+    label:"People",
+    unit:"people"
   }
+
+};
+
+
+function setState(id,text,type){
+
+  const el =
+    document.getElementById(id);
+
+  el.textContent = text;
+  el.className = "state " + type;
+
 }
+
+
+function setFirebaseStatus(online){
+
+  document.getElementById("firebaseDot").className =
+    online ? "dot green" : "dot red";
+
+  document.getElementById("firebaseText").textContent =
+    online ? "Firebase Connected" : "Firebase Error";
+
+  document.getElementById("dbMiniDot").className =
+    online ? "dot green" : "dot red";
+
+  document.getElementById("dbMini").textContent =
+    online ? "Connected" : "Error";
+
+}
+
+
+function setDeviceStatus(online){
+
+  document.getElementById("espDot").className =
+    online ? "dot green" : "dot red";
+
+  document.getElementById("espText").textContent =
+    online ? "ESP32 Online • LIVE" : "ESP32 Offline";
+
+  document.getElementById("deviceMiniDot").className =
+    online ? "dot green" : "dot red";
+
+  document.getElementById("deviceMini").textContent =
+    online ? "Online" : "Offline";
+
+  document.getElementById("streamDot").className =
+    online ? "dot green" : "dot red";
+
+  document.getElementById("streamText").textContent =
+    online ? "Realtime Stream • LIVE" : "Data Stream Stopped";
+
+}
+
 
 function checkDeviceStatus(){
+
   if(!newestTimestamp){
-    setDeviceOnline(false);
+
+    setDeviceStatus(false);
+    return;
+
+  }
+
+  const now =
+    Math.floor(Date.now()/1000);
+
+  const age =
+    now - newestTimestamp;
+
+  setDeviceStatus(
+    age <= OFFLINE_SECONDS
+  );
+
+}
+
+
+function calculateScore(d){
+
+  let score = 100;
+
+  const temp = Number(d.temp);
+  const humi = Number(d.humi);
+  const light = Number(d.light);
+  const co2 = Number(d.co2);
+  const aqi = Number(d.air_quality);
+  const people = Number(d.people);
+
+
+  if(temp < 24 || temp > 28){
+    score -= 8;
+  }
+
+  if(temp < 22 || temp > 30){
+    score -= 7;
+  }
+
+
+  if(humi < 45 || humi > 65){
+    score -= 8;
+  }
+
+
+  if(light < 300 || light > 700){
+    score -= 8;
+  }
+
+
+  if(co2 >= 1000){
+    score -= 12;
+  }
+
+  if(co2 >= 1500){
+    score -= 13;
+  }
+
+
+  if(aqi > 50){
+    score -= 10;
+  }
+
+  if(aqi > 100){
+    score -= 15;
+  }
+
+
+  if(people > 30){
+    score -= 8;
+  }
+
+
+  if(score < 0){
+    score = 0;
+  }
+
+  return score;
+
+}
+
+
+function updateScore(d){
+
+  const score =
+    calculateScore(d);
+
+  document.getElementById("score").textContent =
+    score;
+
+  const label =
+    document.getElementById("scoreLabel");
+
+  const ring =
+    document.getElementById("scoreRing");
+
+
+  if(score >= 90){
+
+    label.textContent = "EXCELLENT";
+    label.style.color = "#15803d";
+    ring.textContent = "🌟";
+    ring.style.background = "#ecfdf5";
+
+  }
+
+  else if(score >= 75){
+
+    label.textContent = "GOOD";
+    label.style.color = "#15803d";
+    ring.textContent = "✅";
+    ring.style.background = "#ecfdf5";
+
+  }
+
+  else if(score >= 60){
+
+    label.textContent = "NEEDS ATTENTION";
+    label.style.color = "#a16207";
+    ring.textContent = "🟡";
+    ring.style.background = "#fffbeb";
+
+  }
+
+  else{
+
+    label.textContent = "ACTION REQUIRED";
+    label.style.color = "#b91c1c";
+    ring.textContent = "⚠️";
+    ring.style.background = "#fef2f2";
+
+  }
+
+}
+
+
+function updateAnalysis(d){
+
+  const temp = Number(d.temp);
+  const humi = Number(d.humi);
+  const light = Number(d.light);
+  const co2 = Number(d.co2);
+  const aqi = Number(d.air_quality);
+  const people = Number(d.people);
+
+  const box =
+    document.getElementById("analysisBox");
+
+  const icon =
+    document.getElementById("analysisIcon");
+
+  const title =
+    document.getElementById("analysisTitle");
+
+  const text =
+    document.getElementById("analysisText");
+
+
+  let issues = [];
+
+
+  if(temp > 28){
+    issues.push(
+      "room temperature is above the configured comfort range"
+    );
+  }
+
+  if(humi > 65){
+    issues.push(
+      "humidity is relatively high"
+    );
+  }
+
+  if(light < 300){
+    issues.push(
+      "classroom lighting is insufficient"
+    );
+  }
+
+  if(co2 >= 1000){
+    issues.push(
+      "CO₂ indicates that additional ventilation may be useful"
+    );
+  }
+
+  if(aqi > 50){
+    issues.push(
+      "air quality requires attention"
+    );
+  }
+
+  if(people > 30){
+    issues.push(
+      "classroom occupancy is high"
+    );
+  }
+
+
+  if(issues.length === 0){
+
+    box.style.background =
+      "#f0fdf4";
+
+    icon.textContent =
+      "✅";
+
+    title.textContent =
+      "Classroom Environment is Good";
+
+    text.textContent =
+      "All monitored conditions are within the configured classroom range. No immediate environmental adjustment is recommended.";
+
+  }
+
+  else if(issues.length <= 2){
+
+    box.style.background =
+      "#fffbeb";
+
+    icon.textContent =
+      "🟡";
+
+    title.textContent =
+      "Classroom Adjustment Recommended";
+
+    text.textContent =
+      "Monitoring detected that " +
+      issues.join(" and ") +
+      ".";
+
+  }
+
+  else{
+
+    box.style.background =
+      "#fef2f2";
+
+    icon.textContent =
+      "⚠️";
+
+    title.textContent =
+      "Multiple Conditions Require Attention";
+
+    text.textContent =
+      "Monitoring detected multiple conditions outside the configured classroom range: " +
+      issues.join(", ") +
+      ".";
+
+  }
+
+}
+
+
+function updateRecommendations(d){
+
+  const temp = Number(d.temp);
+  const light = Number(d.light);
+  const co2 = Number(d.co2);
+  const aqi = Number(d.air_quality);
+  const people = Number(d.people);
+
+
+  const coolState =
+    document.getElementById("coolState");
+
+  const coolText =
+    document.getElementById("coolText");
+
+
+  if(temp > 28){
+
+    coolState.textContent =
+      "ADJUST";
+
+    coolState.className =
+      "control-state control-action";
+
+    coolText.textContent =
+      "Temperature is elevated. Consider adjusting the cooling system.";
+
+  }
+
+  else{
+
+    coolState.textContent =
+      "NORMAL";
+
+    coolState.className =
+      "control-state control-normal";
+
+    coolText.textContent =
+      "Temperature is within the configured classroom range.";
+
+  }
+
+
+  const ventState =
+    document.getElementById("ventState");
+
+  const ventText =
+    document.getElementById("ventText");
+
+
+  if(co2 >= 1000 || aqi > 50){
+
+    ventState.textContent =
+      "VENTILATE";
+
+    ventState.className =
+      "control-state control-action";
+
+    ventText.textContent =
+      "Air conditions indicate that additional classroom ventilation is recommended.";
+
+  }
+
+  else if(people > 30){
+
+    ventState.textContent =
+      "MONITOR";
+
+    ventState.className =
+      "control-state control-action";
+
+    ventText.textContent =
+      "Occupancy is high. Monitor CO₂ and air quality as the class continues.";
+
+  }
+
+  else{
+
+    ventState.textContent =
+      "NORMAL";
+
+    ventState.className =
+      "control-state control-normal";
+
+    ventText.textContent =
+      "CO₂ and air quality are currently within the configured range.";
+
+  }
+
+
+  const lightState =
+    document.getElementById("lightControlState");
+
+  const lightText =
+    document.getElementById("lightControlText");
+
+
+  if(light < 300){
+
+    lightState.textContent =
+      "TURN ON";
+
+    lightState.className =
+      "control-state control-action";
+
+    lightText.textContent =
+      "Lighting is low. Additional classroom lighting is recommended.";
+
+  }
+
+  else if(light > 700){
+
+    lightState.textContent =
+      "REDUCE";
+
+    lightState.className =
+      "control-state control-action";
+
+    lightText.textContent =
+      "Lighting is relatively high. Consider reducing unnecessary lighting.";
+
+  }
+
+  else{
+
+    lightState.textContent =
+      "NORMAL";
+
+    lightState.className =
+      "control-state control-normal";
+
+    lightText.textContent =
+      "Lighting is within the configured classroom range.";
+
+  }
+
+}
+
+
+function updateLatest(d){
+
+  if(!d){
     return;
   }
 
-  const now=Math.floor(Date.now()/1000);
-  const age=now-newestTimestamp;
 
-  setDeviceOnline(age <= OFFLINE_SECONDS);
-}
+  const temp =
+    Number(d.temp);
 
-function updateLatest(d){
-  if(!d)return;
+  const humi =
+    Number(d.humi);
 
-  const temp=Number(d.temp);
-  const humi=Number(d.humi);
-  const light=Number(d.light);
-  const co2=Number(d.co2);
-  const aqi=Number(d.air_quality);
-  const people=Number(d.people);
+  const light =
+    Number(d.light);
 
-  document.getElementById("temp").textContent=temp.toFixed(1);
-  document.getElementById("humi").textContent=humi.toFixed(1);
-  document.getElementById("light").textContent=Math.round(light);
-  document.getElementById("co2").textContent=Math.round(co2);
-  document.getElementById("aqi").textContent=Math.round(aqi);
-  document.getElementById("people").textContent=Math.round(people);
+  const co2 =
+    Number(d.co2);
 
-  if(temp>=24 && temp<=28)
-    state("tempState","Comfortable","good");
-  else if(temp<=30)
-    state("tempState","Slightly warm","warn");
-  else
-    state("tempState","High temperature","bad");
+  const aqi =
+    Number(d.air_quality);
 
-  if(humi>=45 && humi<=65)
-    state("humiState","Comfortable","good");
-  else
-    state("humiState","Check humidity","warn");
+  const people =
+    Number(d.people);
 
-  if(light>=300 && light<=700)
-    state("lightState","Good lighting","good");
-  else if(light<300)
-    state("lightState","Too dark","warn");
-  else
-    state("lightState","Very bright","warn");
 
-  if(co2<1000)
-    state("co2State","Good","good");
-  else if(co2<1500)
-    state("co2State","Ventilation advised","warn");
-  else
-    state("co2State","High CO₂","bad");
+  document.getElementById("temp").textContent =
+    temp.toFixed(1);
 
-  if(aqi<=50)
-    state("aqiState","Good","good");
-  else if(aqi<=100)
-    state("aqiState","Moderate","warn");
-  else
-    state("aqiState","Poor","bad");
+  document.getElementById("humi").textContent =
+    humi.toFixed(1);
 
-  if(people<=30)
-    state("peopleState","Normal occupancy","good");
-  else
-    state("peopleState","Crowded","warn");
+  document.getElementById("light").textContent =
+    Math.round(light);
 
-  newestTimestamp=Number(d.timestamp || 0);
+  document.getElementById("co2").textContent =
+    Math.round(co2);
+
+  document.getElementById("aqi").textContent =
+    Math.round(aqi);
+
+  document.getElementById("people").textContent =
+    Math.round(people);
+
+
+  if(temp >= 24 && temp <= 28){
+
+    setState(
+      "tempState",
+      "Comfortable",
+      "good"
+    );
+
+  }
+
+  else if(temp <= 30){
+
+    setState(
+      "tempState",
+      "Slightly warm",
+      "warn"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "tempState",
+      "High temperature",
+      "bad"
+    );
+
+  }
+
+
+  if(humi >= 45 && humi <= 65){
+
+    setState(
+      "humiState",
+      "Comfortable",
+      "good"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "humiState",
+      "Check humidity",
+      "warn"
+    );
+
+  }
+
+
+  if(light >= 300 && light <= 700){
+
+    setState(
+      "lightState",
+      "Good lighting",
+      "good"
+    );
+
+  }
+
+  else if(light < 300){
+
+    setState(
+      "lightState",
+      "Too dark",
+      "warn"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "lightState",
+      "Very bright",
+      "warn"
+    );
+
+  }
+
+
+  if(co2 < 1000){
+
+    setState(
+      "co2State",
+      "Good",
+      "good"
+    );
+
+  }
+
+  else if(co2 < 1500){
+
+    setState(
+      "co2State",
+      "Ventilation advised",
+      "warn"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "co2State",
+      "High CO₂",
+      "bad"
+    );
+
+  }
+
+
+  if(aqi <= 50){
+
+    setState(
+      "aqiState",
+      "Good",
+      "good"
+    );
+
+  }
+
+  else if(aqi <= 100){
+
+    setState(
+      "aqiState",
+      "Moderate",
+      "warn"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "aqiState",
+      "Poor",
+      "bad"
+    );
+
+  }
+
+
+  if(people <= 30){
+
+    setState(
+      "peopleState",
+      "Normal occupancy",
+      "good"
+    );
+
+  }
+
+  else{
+
+    setState(
+      "peopleState",
+      "Crowded",
+      "warn"
+    );
+
+  }
+
+
+  newestTimestamp =
+    Number(d.timestamp || 0);
+
 
   if(newestTimestamp){
-    const date=new Date(newestTimestamp*1000);
+
+    const date =
+      new Date(
+        newestTimestamp * 1000
+      );
 
     document.getElementById("lastUpdate").textContent =
       date.toLocaleString("th-TH");
+
   }
 
-  updateOverall(temp,humi,light,co2,aqi,people);
+
+  updateScore(d);
+  updateAnalysis(d);
+  updateRecommendations(d);
   checkDeviceStatus();
+
 }
 
-function updateOverall(temp,humi,light,co2,aqi,people){
-  const box=document.getElementById("overallBox");
-  const icon=document.getElementById("overallIcon");
-  const title=document.getElementById("overallTitle");
-  const detail=document.getElementById("overallDetail");
 
-  if(co2>=1500 || aqi>100){
-    box.style.background="#fef2f2";
-    icon.textContent="⚠️";
-    title.textContent="Attention Required";
-    detail.textContent=
-      "Air conditions should be checked. Ventilation is recommended.";
-  }
-  else if(co2>=1000 || temp>28 || people>30){
-    box.style.background="#fffbeb";
-    icon.textContent="🟡";
-    title.textContent="Classroom Needs Adjustment";
-    detail.textContent=
-      "Some environmental values are outside the preferred range.";
-  }
-  else{
-    box.style.background="#f0fdf4";
-    icon.textContent="✅";
-    title.textContent="Classroom Environment is Good";
-    detail.textContent=
-      "Temperature, humidity, lighting, air quality and occupancy are within the simulated normal range.";
-  }
-}
-
-const chart=new Chart(
-  document.getElementById("chart"),
+const chart =
+new Chart(
+  document.getElementById("historyChart"),
   {
+
     type:"line",
+
     data:{
       labels:[],
+
       datasets:[
         {
-          label:"Temperature °C",
+          label:"Temperature",
           data:[],
-          tension:.3
-        },
-        {
-          label:"Humidity %",
-          data:[],
-          tension:.3
-        },
-        {
-          label:"AQI",
-          data:[],
-          tension:.3
+          tension:.3,
+          fill:true,
+          pointRadius:3
         }
       ]
     },
+
     options:{
+
       responsive:true,
       maintainAspectRatio:false,
+
       interaction:{
         mode:"index",
         intersect:false
       },
+
       plugins:{
         legend:{
+          display:true,
           position:"bottom"
         }
+      },
+
+      scales:{
+        x:{
+          ticks:{
+            maxTicksLimit:10
+          }
+        }
       }
+
     }
+
   }
 );
 
-async function loadLatest(){
-  try{
-    const r=await fetch(LATEST+"?t="+Date.now());
 
-    if(!r.ok)throw new Error("HTTP "+r.status);
+function updateChart(){
 
-    const d=await r.json();
-
-    document.getElementById("firebaseDot").className="dot green";
-    document.getElementById("firebaseText").textContent="Firebase Connected";
-
-    updateLatest(d);
+  if(!historyData.length){
+    return;
   }
-  catch(e){
-    console.error(e);
 
-    document.getElementById("firebaseDot").className="dot red";
-    document.getElementById("firebaseText").textContent="Firebase Error";
 
-    setDeviceOnline(false);
-  }
-}
+  const config =
+    SENSOR_CONFIG[selectedSensor];
 
-async function loadHistory(){
-  try{
-    const r=await fetch(HISTORY+"?t="+Date.now());
 
-    if(!r.ok)return;
+  const data =
+    historyData.slice(-30);
 
-    const raw=await r.json();
 
-    if(!raw)return;
+  chart.data.labels =
+    data.map(item=>{
 
-    const all=Object.values(raw)
-      .filter(x=>x && x.timestamp)
-      .sort((a,b)=>Number(a.timestamp)-Number(b.timestamp));
+      const date =
+        new Date(
+          Number(item.timestamp)*1000
+        );
 
-    document.getElementById("recordCount").textContent =
-      all.length+" records";
-
-    const data=all.slice(-30);
-
-    chart.data.labels=data.map(x=>{
-      const d=new Date(Number(x.timestamp)*1000);
-      return d.toLocaleTimeString(
+      return date.toLocaleTimeString(
         "th-TH",
-        {hour:"2-digit",minute:"2-digit",second:"2-digit"}
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
       );
+
     });
 
-    chart.data.datasets[0].data=data.map(x=>Number(x.temp));
-    chart.data.datasets[1].data=data.map(x=>Number(x.humi));
-    chart.data.datasets[2].data=data.map(x=>Number(x.air_quality));
 
-    chart.update();
-  }
-  catch(e){
-    console.error(e);
-  }
+  chart.data.datasets[0].label =
+    config.label +
+    " (" +
+    config.unit +
+    ")";
+
+
+  chart.data.datasets[0].data =
+    data.map(
+      item =>
+      Number(item[selectedSensor])
+    );
+
+
+  chart.update();
+
 }
 
+
+function selectChart(sensor,button){
+
+  selectedSensor =
+    sensor;
+
+
+  document
+    .querySelectorAll(".chart-tab")
+    .forEach(
+      btn =>
+      btn.classList.remove("active")
+    );
+
+
+  button.classList.add("active");
+
+  updateChart();
+
+}
+
+
+function updateRecentActivity(){
+
+  const list =
+    document.getElementById("activityList");
+
+
+  if(!historyData.length){
+
+    list.textContent =
+      "No history data available.";
+
+    return;
+
+  }
+
+
+  const recent =
+    historyData
+      .slice(-5)
+      .reverse();
+
+
+  list.innerHTML =
+    recent.map(item=>{
+
+      const date =
+        new Date(
+          Number(item.timestamp)*1000
+        );
+
+
+      const time =
+        date.toLocaleTimeString(
+          "th-TH",
+          {
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+          }
+        );
+
+
+      const co2 =
+        Math.round(
+          Number(item.co2)
+        );
+
+
+      const people =
+        Math.round(
+          Number(item.people)
+        );
+
+
+      const temp =
+        Number(item.temp)
+          .toFixed(1);
+
+
+      let status =
+        "NORMAL";
+
+
+      if(
+        co2 >= 1000 ||
+        Number(item.air_quality) > 50 ||
+        Number(item.temp) > 28
+      ){
+
+        status =
+          "CHECK";
+
+      }
+
+
+      return `
+        <div class="activity">
+
+          <div class="activity-time">
+            ${time}
+          </div>
+
+          <div>
+            ${temp} °C •
+            ${co2} ppm CO₂ •
+            ${people} people
+          </div>
+
+          <div class="activity-status">
+            ${status}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+async function loadLatest(){
+
+  try{
+
+    const response =
+      await fetch(
+        LATEST +
+        "?t=" +
+        Date.now()
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    setFirebaseStatus(true);
+
+    updateLatest(data);
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Latest error:",
+      error
+    );
+
+    setFirebaseStatus(false);
+
+  }
+
+}
+
+
+async function loadHistory(){
+
+  try{
+
+    const response =
+      await fetch(
+        HISTORY +
+        "?t=" +
+        Date.now()
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const raw =
+      await response.json();
+
+
+    if(!raw){
+
+      return;
+
+    }
+
+
+    historyData =
+      Object.values(raw)
+      .filter(
+        item =>
+        item &&
+        item.timestamp
+      )
+      .sort(
+        (a,b) =>
+        Number(a.timestamp) -
+        Number(b.timestamp)
+      );
+
+
+    document.getElementById("recordCount").textContent =
+      historyData.length +
+      " records";
+
+
+    updateChart();
+    updateRecentActivity();
+
+  }
+
+  catch(error){
+
+    console.error(
+      "History error:",
+      error
+    );
+
+  }
+
+}
+
+
 async function refresh(){
+
   await Promise.all([
     loadLatest(),
     loadHistory()
   ]);
+
 }
+
 
 refresh();
 
-// โหลดข้อมูลใหม่ทุก 5 วินาที
-setInterval(refresh,5000);
+setInterval(
+  refresh,
+  5000
+);
 
-// ตรวจ ESP32 ทุกวินาที แม้ Firebase ยังเข้าถึงได้
-setInterval(checkDeviceStatus,1000);
+setInterval(
+  checkDeviceStatus,
+  1000
+);
+
 </script>
 
 </body>
