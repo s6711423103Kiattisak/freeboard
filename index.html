@@ -1,835 +1,544 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Classroom 103</title>
 
-  <title>Smart Classroom 103</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+  background:#f4f7fb;
+  color:#172033;
+}
+header{
+  background:linear-gradient(120deg,#2563eb,#06b6d4);
+  color:white;
+  padding:28px 5%;
+}
+.header-inner{
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+h1{margin:0 0 6px;font-size:30px}
+.subtitle{opacity:.9}
+.badges{display:flex;gap:10px;flex-wrap:wrap}
+.badge{
+  padding:10px 15px;
+  border-radius:30px;
+  background:rgba(255,255,255,.16);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:#f59e0b;
+}
+.green{background:#22c55e;box-shadow:0 0 8px #22c55e}
+.red{background:#ef4444}
+main{
+  max-width:1250px;
+  margin:auto;
+  padding:28px 20px 50px;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.section-head h2{margin:0}
+.last-update{font-size:14px;color:#64748b}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.card{
+  background:white;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid #e6eaf0;
+  box-shadow:0 6px 22px rgba(15,23,42,.06);
+}
+.icon{font-size:31px}
+.label{
+  color:#64748b;
+  margin-top:15px;
+  font-size:14px;
+}
+.value{
+  font-size:36px;
+  font-weight:700;
+  margin-top:5px;
+}
+.unit{
+  font-size:16px;
+  font-weight:400;
+  color:#64748b;
+}
+.state{
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 11px;
+  border-radius:20px;
+  font-size:12px;
+  background:#e2e8f0;
+}
+.good{background:#dcfce7;color:#15803d}
+.warn{background:#fef3c7;color:#a16207}
+.bad{background:#fee2e2;color:#b91c1c}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+.panel{
+  background:white;
+  margin-top:22px;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid #e6eaf0;
+  box-shadow:0 6px 22px rgba(15,23,42,.06);
+}
+.panel h2{margin-top:0}
+.overall{
+  padding:18px;
+  border-radius:14px;
+  background:#f0fdf4;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.overall-icon{font-size:34px}
+.overall-title{font-weight:700;font-size:18px}
+.overall-detail{
+  color:#64748b;
+  margin-top:5px;
+  line-height:1.5;
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:18px;
+}
+.info{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:12px;
+}
+.info-title{font-size:12px;color:#64748b}
+.info-value{font-weight:700;margin-top:5px}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #1f2937;
-    }
-
-    .header {
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      color: white;
-      padding: 30px 20px;
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .header h1 {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
-
-    .header p {
-      opacity: 0.9;
-    }
-
-    .connection {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.15);
-      padding: 10px 16px;
-      border-radius: 30px;
-    }
-
-    .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: #f59e0b;
-    }
-
-    .dot.online {
-      background: #22c55e;
-      box-shadow: 0 0 10px #22c55e;
-    }
-
-    .dot.offline {
-      background: #ef4444;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 20px 50px;
-    }
-
-    .overview {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .overview h2 {
-      font-size: 22px;
-    }
-
-    .updated {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-      border: 1px solid #e5e7eb;
-      transition: 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.09);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .icon {
-      font-size: 30px;
-    }
-
-    .label {
-      color: #64748b;
-      font-size: 14px;
-      margin-top: 15px;
-    }
-
-    .value {
-      font-size: 34px;
-      font-weight: bold;
-      margin-top: 5px;
-    }
-
-    .unit {
-      font-size: 16px;
-      color: #64748b;
-      font-weight: normal;
-    }
-
-    .status {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      background: #dcfce7;
-      color: #15803d;
-    }
-
-    .summary {
-      margin-top: 25px;
-      background: white;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-      border: 1px solid #e5e7eb;
-    }
-
-    .summary h2 {
-      margin-bottom: 15px;
-    }
-
-    .room-status {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px;
-      background: #f0fdf4;
-      border-radius: 12px;
-    }
-
-    .room-status-icon {
-      font-size: 28px;
-    }
-
-    #roomMessage {
-      font-weight: bold;
-    }
-
-    #roomDetail {
-      margin-top: 4px;
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .chart-box {
-      margin-top: 25px;
-      background: white;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-      border: 1px solid #e5e7eb;
-    }
-
-    .chart-box h2 {
-      margin-bottom: 20px;
-    }
-
-    .chart-container {
-      position: relative;
-      height: 350px;
-    }
-
-    footer {
-      text-align: center;
-      color: #94a3b8;
-      margin-top: 30px;
-      font-size: 13px;
-    }
-
-    @media (max-width: 900px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .header h1 {
-        font-size: 24px;
-      }
-    }
-  </style>
+.chart-wrap{
+  height:360px;
+  position:relative;
+}
+footer{
+  text-align:center;
+  color:#94a3b8;
+  margin-top:28px;
+  font-size:13px;
+  line-height:1.7;
+}
+@media(max-width:850px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .info-grid{grid-template-columns:1fr}
+}
+@media(max-width:550px){
+  .cards{grid-template-columns:1fr}
+  h1{font-size:24px}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    <div class="header-content">
-
-      <div>
-        <h1>Smart Classroom 103</h1>
-        <p>ESP32 IoT Realtime Monitoring Dashboard</p>
-      </div>
-
-      <div class="connection">
-        <div id="onlineDot" class="dot"></div>
-        <span id="connectionText">Connecting...</span>
-      </div>
-
-    </div>
+<header>
+<div class="header-inner">
+  <div>
+    <h1>🏫 Smart Classroom 103</h1>
+    <div class="subtitle">ESP32 IoT Realtime Monitoring System</div>
   </div>
 
-  <div class="container">
-
-    <div class="overview">
-      <h2>Realtime Classroom Data</h2>
-
-      <div class="updated">
-        Last update:
-        <span id="lastUpdate">Waiting for data...</span>
-      </div>
+  <div class="badges">
+    <div class="badge">
+      <span id="firebaseDot" class="dot"></span>
+      <span id="firebaseText">Firebase...</span>
     </div>
 
-
-    <div class="cards">
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">🌡️</span>
-        </div>
-
-        <div class="label">Temperature</div>
-
-        <div class="value">
-          <span id="temp">--</span>
-          <span class="unit">°C</span>
-        </div>
-
-        <span id="tempStatus" class="status">Waiting</span>
-      </div>
-
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">💧</span>
-        </div>
-
-        <div class="label">Humidity</div>
-
-        <div class="value">
-          <span id="humi">--</span>
-          <span class="unit">%</span>
-        </div>
-
-        <span id="humiStatus" class="status">Waiting</span>
-      </div>
-
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">💡</span>
-        </div>
-
-        <div class="label">Light</div>
-
-        <div class="value">
-          <span id="light">--</span>
-          <span class="unit">lux</span>
-        </div>
-
-        <span id="lightStatus" class="status">Waiting</span>
-      </div>
-
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">☁️</span>
-        </div>
-
-        <div class="label">CO2</div>
-
-        <div class="value">
-          <span id="co2">--</span>
-          <span class="unit">ppm</span>
-        </div>
-
-        <span id="co2Status" class="status">Waiting</span>
-      </div>
-
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">🍃</span>
-        </div>
-
-        <div class="label">Air Quality</div>
-
-        <div class="value">
-          <span id="aqi">--</span>
-          <span class="unit">AQI</span>
-        </div>
-
-        <span id="aqiStatus" class="status">Waiting</span>
-      </div>
-
-
-      <div class="card">
-        <div class="card-top">
-          <span class="icon">👥</span>
-        </div>
-
-        <div class="label">People</div>
-
-        <div class="value">
-          <span id="people">--</span>
-          <span class="unit">people</span>
-        </div>
-
-        <span id="peopleStatus" class="status">Waiting</span>
-      </div>
-
+    <div class="badge">
+      <span id="espDot" class="dot"></span>
+      <span id="espText">ESP32...</span>
     </div>
+  </div>
+</div>
+</header>
 
+<main>
 
-    <div class="summary">
+<div class="section-head">
+  <h2>Realtime Classroom Data</h2>
+  <div class="last-update">
+    Last sensor update: <b id="lastUpdate">Waiting...</b>
+  </div>
+</div>
 
-      <h2>Classroom Status</h2>
+<div class="cards">
 
-      <div class="room-status">
+<div class="card">
+  <div class="icon">🌡️</div>
+  <div class="label">Temperature</div>
+  <div class="value"><span id="temp">--</span> <span class="unit">°C</span></div>
+  <span id="tempState" class="state">Waiting</span>
+</div>
 
-        <div class="room-status-icon">🏫</div>
+<div class="card">
+  <div class="icon">💧</div>
+  <div class="label">Humidity</div>
+  <div class="value"><span id="humi">--</span> <span class="unit">%</span></div>
+  <span id="humiState" class="state">Waiting</span>
+</div>
 
-        <div>
-          <div id="roomMessage">
-            Waiting for sensor data...
-          </div>
+<div class="card">
+  <div class="icon">💡</div>
+  <div class="label">Light Level</div>
+  <div class="value"><span id="light">--</span> <span class="unit">lux</span></div>
+  <span id="lightState" class="state">Waiting</span>
+</div>
 
-          <div id="roomDetail">
-            Smart Classroom Monitoring System
-          </div>
-        </div>
+<div class="card">
+  <div class="icon">☁️</div>
+  <div class="label">CO₂</div>
+  <div class="value"><span id="co2">--</span> <span class="unit">ppm</span></div>
+  <span id="co2State" class="state">Waiting</span>
+</div>
 
-      </div>
+<div class="card">
+  <div class="icon">🍃</div>
+  <div class="label">Air Quality</div>
+  <div class="value"><span id="aqi">--</span> <span class="unit">AQI</span></div>
+  <span id="aqiState" class="state">Waiting</span>
+</div>
 
+<div class="card">
+  <div class="icon">👥</div>
+  <div class="label">People</div>
+  <div class="value"><span id="people">--</span> <span class="unit">people</span></div>
+  <span id="peopleState" class="state">Waiting</span>
+</div>
+
+</div>
+
+<div class="panel">
+<h2>Classroom Status</h2>
+
+<div class="overall" id="overallBox">
+  <div class="overall-icon" id="overallIcon">🔄</div>
+  <div>
+    <div class="overall-title" id="overallTitle">Waiting for sensor data</div>
+    <div class="overall-detail" id="overallDetail">
+      Connecting to Smart Classroom monitoring system...
     </div>
+  </div>
+</div>
 
-
-    <div class="chart-box">
-
-      <h2>Recent History</h2>
-
-      <div class="chart-container">
-        <canvas id="historyChart"></canvas>
-      </div>
-
-    </div>
-
-
-    <footer>
-      Smart Classroom 103 | ESP32 + ESPHome + Firebase Realtime Database
-    </footer>
-
+<div class="info-grid">
+  <div class="info">
+    <div class="info-title">DEVICE</div>
+    <div class="info-value">ESP32 - Classroom 103</div>
   </div>
 
+  <div class="info">
+    <div class="info-title">DATABASE</div>
+    <div class="info-value">Firebase Realtime Database</div>
+  </div>
+
+  <div class="info">
+    <div class="info-title">HISTORY RECORDS</div>
+    <div class="info-value" id="recordCount">--</div>
+  </div>
+</div>
+</div>
+
+<div class="panel">
+  <h2>📈 Sensor History</h2>
+  <div class="chart-wrap">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<footer>
+  Smart Classroom 103<br>
+  ESP32 • ESPHome • Firebase Realtime Database • GitHub Pages
+</footer>
+
+</main>
 
 <script>
+const DB =
+"https://iot-103-default-rtdb.asia-southeast1.firebasedatabase.app";
 
-const DATABASE =
-  "https://iot-103-default-rtdb.asia-southeast1.firebasedatabase.app";
+const LATEST = DB + "/lab/esp32-01/latest.json";
+const HISTORY = DB + "/lab/esp32-01/history.json";
 
-const LATEST =
-  DATABASE + "/lab/esp32-01/latest.json";
+// ถ้าไม่มีข้อมูลใหม่เกิน 30 วินาที ถือว่าบอร์ด offline
+const OFFLINE_SECONDS = 30;
 
-const HISTORY =
-  DATABASE + "/lab/esp32-01/history.json";
+let newestTimestamp = 0;
 
-
-let lastTimestamp = 0;
-
-
-const ctx =
-  document.getElementById("historyChart").getContext("2d");
-
-
-const chart = new Chart(ctx, {
-
-  type: "line",
-
-  data: {
-
-    labels: [],
-
-    datasets: [
-
-      {
-        label: "Temperature (C)",
-        data: [],
-        tension: 0.3
-      },
-
-      {
-        label: "Humidity (%)",
-        data: [],
-        tension: 0.3
-      },
-
-      {
-        label: "CO2 / 20",
-        data: [],
-        tension: 0.3
-      },
-
-      {
-        label: "AQI",
-        data: [],
-        tension: 0.3
-      }
-
-    ]
-
-  },
-
-  options: {
-
-    responsive: true,
-    maintainAspectRatio: false,
-
-    interaction: {
-      mode: "index",
-      intersect: false
-    },
-
-    plugins: {
-
-      legend: {
-        position: "bottom"
-      }
-
-    },
-
-    scales: {
-
-      y: {
-        beginAtZero: false
-      }
-
-    }
-
-  }
-
-});
-
-
-function setStatus(id, text, good = true) {
-
-  const element = document.getElementById(id);
-
-  element.textContent = text;
-
-  if (good) {
-
-    element.style.background = "#dcfce7";
-    element.style.color = "#15803d";
-
-  } else {
-
-    element.style.background = "#fee2e2";
-    element.style.color = "#b91c1c";
-
-  }
-
+function state(id,text,type){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className="state "+type;
 }
 
+function setDeviceOnline(isOnline){
+  const dot=document.getElementById("espDot");
+  const text=document.getElementById("espText");
 
-function updateDashboard(data) {
+  if(isOnline){
+    dot.className="dot green";
+    text.textContent="ESP32 Online • LIVE";
+  }else{
+    dot.className="dot red";
+    text.textContent="ESP32 Offline";
+  }
+}
 
-  if (!data) return;
-
-
-  document.getElementById("temp").textContent =
-    Number(data.temp).toFixed(1);
-
-  document.getElementById("humi").textContent =
-    Number(data.humi).toFixed(1);
-
-  document.getElementById("light").textContent =
-    Math.round(data.light);
-
-  document.getElementById("co2").textContent =
-    Math.round(data.co2);
-
-  document.getElementById("aqi").textContent =
-    Math.round(data.air_quality);
-
-  document.getElementById("people").textContent =
-    Math.round(data.people);
-
-
-  if (data.temp >= 24 && data.temp <= 28) {
-
-    setStatus("tempStatus", "Comfortable", true);
-
-  } else {
-
-    setStatus("tempStatus", "Check temperature", false);
-
+function checkDeviceStatus(){
+  if(!newestTimestamp){
+    setDeviceOnline(false);
+    return;
   }
 
+  const now=Math.floor(Date.now()/1000);
+  const age=now-newestTimestamp;
 
-  if (data.humi >= 45 && data.humi <= 65) {
+  setDeviceOnline(age <= OFFLINE_SECONDS);
+}
 
-    setStatus("humiStatus", "Comfortable", true);
+function updateLatest(d){
+  if(!d)return;
 
-  } else {
+  const temp=Number(d.temp);
+  const humi=Number(d.humi);
+  const light=Number(d.light);
+  const co2=Number(d.co2);
+  const aqi=Number(d.air_quality);
+  const people=Number(d.people);
 
-    setStatus("humiStatus", "Check humidity", false);
+  document.getElementById("temp").textContent=temp.toFixed(1);
+  document.getElementById("humi").textContent=humi.toFixed(1);
+  document.getElementById("light").textContent=Math.round(light);
+  document.getElementById("co2").textContent=Math.round(co2);
+  document.getElementById("aqi").textContent=Math.round(aqi);
+  document.getElementById("people").textContent=Math.round(people);
 
-  }
+  if(temp>=24 && temp<=28)
+    state("tempState","Comfortable","good");
+  else if(temp<=30)
+    state("tempState","Slightly warm","warn");
+  else
+    state("tempState","High temperature","bad");
 
+  if(humi>=45 && humi<=65)
+    state("humiState","Comfortable","good");
+  else
+    state("humiState","Check humidity","warn");
 
-  if (data.light >= 300 && data.light <= 700) {
+  if(light>=300 && light<=700)
+    state("lightState","Good lighting","good");
+  else if(light<300)
+    state("lightState","Too dark","warn");
+  else
+    state("lightState","Very bright","warn");
 
-    setStatus("lightStatus", "Good lighting", true);
+  if(co2<1000)
+    state("co2State","Good","good");
+  else if(co2<1500)
+    state("co2State","Ventilation advised","warn");
+  else
+    state("co2State","High CO₂","bad");
 
-  } else {
+  if(aqi<=50)
+    state("aqiState","Good","good");
+  else if(aqi<=100)
+    state("aqiState","Moderate","warn");
+  else
+    state("aqiState","Poor","bad");
 
-    setStatus("lightStatus", "Check lighting", false);
+  if(people<=30)
+    state("peopleState","Normal occupancy","good");
+  else
+    state("peopleState","Crowded","warn");
 
-  }
+  newestTimestamp=Number(d.timestamp || 0);
 
-
-  if (data.co2 < 1000) {
-
-    setStatus("co2Status", "Good", true);
-
-  } else {
-
-    setStatus("co2Status", "Ventilation needed", false);
-
-  }
-
-
-  if (data.air_quality <= 50) {
-
-    setStatus("aqiStatus", "Good", true);
-
-  } else {
-
-    setStatus("aqiStatus", "Moderate", false);
-
-  }
-
-
-  if (data.people <= 30) {
-
-    setStatus("peopleStatus", "Normal occupancy", true);
-
-  } else {
-
-    setStatus("peopleStatus", "Crowded", false);
-
-  }
-
-
-  lastTimestamp = Number(data.timestamp || 0);
-
-
-  if (lastTimestamp > 0) {
-
-    const date =
-      new Date(lastTimestamp * 1000);
+  if(newestTimestamp){
+    const date=new Date(newestTimestamp*1000);
 
     document.getElementById("lastUpdate").textContent =
       date.toLocaleString("th-TH");
-
   }
 
-
-  updateRoomStatus(data);
-
+  updateOverall(temp,humi,light,co2,aqi,people);
+  checkDeviceStatus();
 }
 
+function updateOverall(temp,humi,light,co2,aqi,people){
+  const box=document.getElementById("overallBox");
+  const icon=document.getElementById("overallIcon");
+  const title=document.getElementById("overallTitle");
+  const detail=document.getElementById("overallDetail");
 
-function updateRoomStatus(data) {
-
-  const message =
-    document.getElementById("roomMessage");
-
-  const detail =
-    document.getElementById("roomDetail");
-
-
-  if (data.co2 >= 1000) {
-
-    message.textContent =
-      "Ventilation Recommended";
-
-    detail.textContent =
-      "CO2 level is high. Consider increasing classroom ventilation.";
-
-    return;
-
+  if(co2>=1500 || aqi>100){
+    box.style.background="#fef2f2";
+    icon.textContent="⚠️";
+    title.textContent="Attention Required";
+    detail.textContent=
+      "Air conditions should be checked. Ventilation is recommended.";
   }
-
-
-  if (data.temp > 28) {
-
-    message.textContent =
-      "Room Temperature is High";
-
-    detail.textContent =
-      "Consider adjusting air conditioning.";
-
-    return;
-
+  else if(co2>=1000 || temp>28 || people>30){
+    box.style.background="#fffbeb";
+    icon.textContent="🟡";
+    title.textContent="Classroom Needs Adjustment";
+    detail.textContent=
+      "Some environmental values are outside the preferred range.";
   }
-
-
-  if (data.people > 30) {
-
-    message.textContent =
-      "High Classroom Occupancy";
-
-    detail.textContent =
-      "The classroom is becoming crowded.";
-
-    return;
-
+  else{
+    box.style.background="#f0fdf4";
+    icon.textContent="✅";
+    title.textContent="Classroom Environment is Good";
+    detail.textContent=
+      "Temperature, humidity, lighting, air quality and occupancy are within the simulated normal range.";
   }
-
-
-  message.textContent =
-    "Classroom Environment is Good";
-
-  detail.textContent =
-    "Temperature, air quality and occupancy are within normal simulated conditions.";
-
 }
 
-
-async function loadLatest() {
-
-  try {
-
-    const response =
-      await fetch(LATEST + "?t=" + Date.now());
-
-    if (!response.ok) {
-
-      throw new Error(
-        "HTTP " + response.status
-      );
-
+const chart=new Chart(
+  document.getElementById("chart"),
+  {
+    type:"line",
+    data:{
+      labels:[],
+      datasets:[
+        {
+          label:"Temperature °C",
+          data:[],
+          tension:.3
+        },
+        {
+          label:"Humidity %",
+          data:[],
+          tension:.3
+        },
+        {
+          label:"AQI",
+          data:[],
+          tension:.3
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{
+        mode:"index",
+        intersect:false
+      },
+      plugins:{
+        legend:{
+          position:"bottom"
+        }
+      }
     }
-
-    const data =
-      await response.json();
-
-    updateDashboard(data);
-
-    document
-      .getElementById("onlineDot")
-      .className = "dot online";
-
-    document
-      .getElementById("connectionText")
-      .textContent = "Firebase Connected";
-
   }
-
-  catch (error) {
-
-    console.error(error);
-
-    document
-      .getElementById("onlineDot")
-      .className = "dot offline";
-
-    document
-      .getElementById("connectionText")
-      .textContent = "Connection Error";
-
-  }
-
-}
-
-
-async function loadHistory() {
-
-  try {
-
-    const response =
-      await fetch(HISTORY + "?t=" + Date.now());
-
-    if (!response.ok) return;
-
-
-    const history =
-      await response.json();
-
-
-    if (!history) return;
-
-
-    const records =
-      Object.values(history)
-      .filter(item => item && item.timestamp)
-      .sort(
-        (a, b) =>
-        Number(a.timestamp) -
-        Number(b.timestamp)
-      )
-      .slice(-20);
-
-
-    chart.data.labels =
-      records.map(item => {
-
-        const date =
-          new Date(
-            Number(item.timestamp) * 1000
-          );
-
-        return date.toLocaleTimeString(
-          "th-TH",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-          }
-        );
-
-      });
-
-
-    chart.data.datasets[0].data =
-      records.map(
-        item => Number(item.temp)
-      );
-
-
-    chart.data.datasets[1].data =
-      records.map(
-        item => Number(item.humi)
-      );
-
-
-    chart.data.datasets[2].data =
-      records.map(
-        item => Number(item.co2) / 20
-      );
-
-
-    chart.data.datasets[3].data =
-      records.map(
-        item => Number(item.air_quality)
-      );
-
-
-    chart.update();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "History error:",
-      error
-    );
-
-  }
-
-}
-
-
-async function refreshDashboard() {
-
-  await loadLatest();
-
-  await loadHistory();
-
-}
-
-
-refreshDashboard();
-
-
-setInterval(
-  refreshDashboard,
-  5000
 );
 
+async function loadLatest(){
+  try{
+    const r=await fetch(LATEST+"?t="+Date.now());
+
+    if(!r.ok)throw new Error("HTTP "+r.status);
+
+    const d=await r.json();
+
+    document.getElementById("firebaseDot").className="dot green";
+    document.getElementById("firebaseText").textContent="Firebase Connected";
+
+    updateLatest(d);
+  }
+  catch(e){
+    console.error(e);
+
+    document.getElementById("firebaseDot").className="dot red";
+    document.getElementById("firebaseText").textContent="Firebase Error";
+
+    setDeviceOnline(false);
+  }
+}
+
+async function loadHistory(){
+  try{
+    const r=await fetch(HISTORY+"?t="+Date.now());
+
+    if(!r.ok)return;
+
+    const raw=await r.json();
+
+    if(!raw)return;
+
+    const all=Object.values(raw)
+      .filter(x=>x && x.timestamp)
+      .sort((a,b)=>Number(a.timestamp)-Number(b.timestamp));
+
+    document.getElementById("recordCount").textContent =
+      all.length+" records";
+
+    const data=all.slice(-30);
+
+    chart.data.labels=data.map(x=>{
+      const d=new Date(Number(x.timestamp)*1000);
+      return d.toLocaleTimeString(
+        "th-TH",
+        {hour:"2-digit",minute:"2-digit",second:"2-digit"}
+      );
+    });
+
+    chart.data.datasets[0].data=data.map(x=>Number(x.temp));
+    chart.data.datasets[1].data=data.map(x=>Number(x.humi));
+    chart.data.datasets[2].data=data.map(x=>Number(x.air_quality));
+
+    chart.update();
+  }
+  catch(e){
+    console.error(e);
+  }
+}
+
+async function refresh(){
+  await Promise.all([
+    loadLatest(),
+    loadHistory()
+  ]);
+}
+
+refresh();
+
+// โหลดข้อมูลใหม่ทุก 5 วินาที
+setInterval(refresh,5000);
+
+// ตรวจ ESP32 ทุกวินาที แม้ Firebase ยังเข้าถึงได้
+setInterval(checkDeviceStatus,1000);
 </script>
 
 </body>
